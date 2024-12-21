@@ -7,7 +7,7 @@ import random
 import string
 
 from entidades import User, Message
-from repository import salvar_nova_mensagem
+from repository import salvar_nova_mensagem, listar_config
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -22,9 +22,10 @@ def start_message(message):
 ## Handler para mensagens em texto
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
+    configs = listar_config()
     usuario = User(message.from_user) 
-    mensagem = Message(message)
-    salvar_nova_mensagem(usuario, mensagem)
+    mensagem = Message(message, configs)
+    salvar_nova_mensagem(usuario, mensagem, mensagem.llm)
     bot.send_message(message.chat.id, "mensagem recebida, estaremos analisando.")
 
 ## Handler para mensagens em audio

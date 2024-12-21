@@ -25,10 +25,15 @@ def select_all_mensagens():
         usuarios = [row for row in usuarios]  # Cada linha já é um dicionário
         mensagens = connection.execute(text("SELECT * FROM mensagens")).mappings()
         mensagens = [row for row in mensagens]  # Cada linha já é um dicionário
+        llms = connection.execute(text("SELECT * FROM llm")).mappings()
+        llms = [row for row in llms]  # Cada linha já é um dicionário
 
         # objetos em dicionários:
         users = User.to_dict(usuarios)
-        messages = Message.to_dict(mensagens)
+
+        # Instanciando a classe Message para chamar o método to_dict
+        message_instance = Message()
+        messages = message_instance.to_dict(mensagens=mensagens, llms=llms)
 
         # inserindo as mensagens por usuários:
         for usuario in users:

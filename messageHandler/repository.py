@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from entidades import User, Message
-from tables import Usuario, Mensagem, Base
+from tables import Usuario, Mensagem, Base, LLM, Configs
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -28,10 +28,47 @@ def create_tables():
     except Exception as e:
         print(f"Error creating tables: {e}")
 
-def salvar_nova_mensagem(usuario: User, mensagem: Message):
+def incluir_LLMs():
+    try:
+        # Verificar se já existem registros na tabela LLM
+        existing_count = session.query(LLM).count()
+        if existing_count > 0:
+            print("LLM values already exist. Skipping insertion.")
+            return
+
+        # Inserir valores iniciais
+        llms = [
+            LLM(id=1, llm="GroqAI"),
+            LLM(id=2, llm="ChatGPT"),
+            LLM(id=3, llm="Gemini"),
+        ]
+        session.add_all(llms)
+        session.commit()
+
+        session.add(Configs(id=1, campo='llm', valor='GroqAI'))
+        session.commit()
+
+        print("...Incluindo valores de migration na tablema LLM \n...GroqAI setada como IA")
+    except Exception as e:
+        session.rollback()
+        print(f"Error inserting LLM values: {e}")
+
+def listar_config():
+    try:
+        # Buscar todos os registros da tabela Configs
+        configs = session.query(Configs).all()
+
+        # Retornar a lista de dicionários, se necessário
+        return [{"id": config.id, "campo": config.campo, "valor": config.valor} for config in configs]
+    except Exception as e:
+        print(f"Error fetching configurations: {e}")
+        return []
+
+def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
     try:
         # Verificar se o usuário já existe no banco de dados
         usuario_bd = session.query(Usuario).filter_by(userID_Telegram=usuario.userID_Telegram).first()
+        id_llm = session.query(LLM.id).filter_by(llm=llm_selected).scalar()
 
         if not usuario_bd:
             # Se o usuário não existir, cria e insere no banco
@@ -47,6 +84,7 @@ def salvar_nova_mensagem(usuario: User, mensagem: Message):
             tipo_mensagem=mensagem.tipo_mensagem,
 
             # se IA não analisar corretamente, valor será NONE/NULL.
+            llm_id=id_llm,
             analise_ia=mensagem.analiseIA,
             categoria=mensagem.categoria,
             feedback=mensagem.feedback,

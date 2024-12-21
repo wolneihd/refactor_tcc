@@ -24,14 +24,33 @@ class Mensagem(Base):
 
     id = Column(Integer, primary_key=True)  # Chave primária
     usuario_id = Column(Integer, ForeignKey('usuarios.id'))  # Chave estrangeira
-    texto_msg = Column(String(255), nullable=False)  # Especificando o comprimento máximo
+    texto_msg = Column(String(255), nullable=False)
     timestamp = Column(Integer, nullable=False)
-    tipo_mensagem = Column(String(255), nullable=False)  # Especificando o comprimento máximo
+    tipo_mensagem = Column(String(255), nullable=False)
 
     # Colunas campos IA
-    analise_ia = Column(String(255), nullable=True)  # Especificando o comprimento máximo
-    categoria = Column(String(255), nullable=True)  # Especificando o comprimento máximo
-    feedback = Column(String(255), nullable=True)  # Especificando o comprimento máximo
+    llm_id = Column(Integer, ForeignKey('llm.id'))  # Chave estrangeira
+    analise_ia = Column(String(255), nullable=True)
+    categoria = Column(String(255), nullable=True)
+    feedback = Column(String(255), nullable=True)
 
-    # Relacionamento com a tabela Usuario
+    # Relacionamentos
     usuario = relationship("Usuario", back_populates="mensagens")
+    llm = relationship("LLM", back_populates="mensagens")  # Correção no back_populates
+
+# Tabela LLM (tabela "filha")
+class LLM(Base):
+    __tablename__ = 'llm'
+
+    id = Column(Integer, primary_key=True)  # Chave primária
+    llm = Column(String(50), nullable=False)
+
+    # Relacionamento com a tabela Mensagem
+    mensagens = relationship("Mensagem", back_populates="llm")  # Correção no nome do relacionamento
+
+class Configs(Base):
+    __tablename__ = 'configs'
+
+    id = Column(Integer, primary_key=True)  # Chave primária
+    campo = Column(String(50), nullable=False)
+    valor = Column(String(50), nullable=False)
