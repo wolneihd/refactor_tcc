@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from entidades import User, Message
@@ -53,16 +53,17 @@ def incluir_LLMs():
         session.rollback()
         print(f"Error inserting LLM values: {e}")
 
-def listar_config():
+def select_config():
     try:
-        # Buscar todos os registros da tabela Configs
-        configs = session.query(Configs).all()
-
-        # Retornar a lista de dicionários, se necessário
-        return [{"id": config.id, "campo": config.campo, "valor": config.valor} for config in configs]
+        # buscar IA configurada pelo usuário para analisas as mensagens:
+        with engine.connect() as connection:
+            # objetos em mapping
+            result = connection.execute(text("select valor from configs where campo ='llm';")).mappings()
+            ia = [row['valor'] for row in result]
+        return ia[0]
     except Exception as e:
         print(f"Error fetching configurations: {e}")
-        return []
+        return []    
 
 def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
     try:

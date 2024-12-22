@@ -13,15 +13,7 @@ class User:
         return lista
     
 class Message:
-    def __init__(self):
-        pass
-
-    def compare_id(self, llms: dict, id: int):
-        for dado in llms:
-            if dado['id'] == id:
-                return dado['llm']
-
-    def to_dict(self, mensagens: dict, llms: dict):
+    def to_dict(mensagens: dict):
         lista = []
         for mensagem in mensagens:
             dicionario = {
@@ -33,7 +25,7 @@ class Message:
                 'analise_ia': mensagem['analise_ia'],
                 'categoria': mensagem['categoria'],
                 'feedback': mensagem['feedback'],
-                'llm': self.compare_id(llms=llms, id=mensagem['llm_id']),
+                'llm': mensagem['llm']
             }
             lista.append(dicionario)
         return lista

@@ -23,17 +23,27 @@ def select_all_mensagens():
         # objetos em mapping
         usuarios = connection.execute(text("SELECT * FROM usuarios")).mappings()
         usuarios = [row for row in usuarios]  # Cada linha já é um dicionário
-        mensagens = connection.execute(text("SELECT * FROM mensagens")).mappings()
+        mensagens = connection.execute(text("""
+            SELECT 
+                mensagens.id,
+                mensagens.usuario_id,
+                mensagens.texto_msg,
+                mensagens.timestamp,
+                mensagens.tipo_mensagem,
+                llm.llm,
+                mensagens.analise_ia,
+                mensagens.categoria,
+                mensagens.feedback
+                FROM mensagens
+                INNER JOIN llm ON llm.id = mensagens.llm_id;
+        """)).mappings()
         mensagens = [row for row in mensagens]  # Cada linha já é um dicionário
-        llms = connection.execute(text("SELECT * FROM llm")).mappings()
-        llms = [row for row in llms]  # Cada linha já é um dicionário
 
         # objetos em dicionários:
         users = User.to_dict(usuarios)
 
         # Instanciando a classe Message para chamar o método to_dict
-        message_instance = Message()
-        messages = message_instance.to_dict(mensagens=mensagens, llms=llms)
+        messages = Message.to_dict(mensagens=mensagens)
 
         # inserindo as mensagens por usuários:
         for usuario in users:

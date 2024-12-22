@@ -9,18 +9,14 @@ class User:
         self.sobrenome = user.last_name if user.last_name else ''  
 
 class Message:
-    def __init__(self, data: dict, configs: dict):
+    def __init__(self, data: dict, llm: str):
         self.id_user = data.from_user.id
         self.texto_msg = data.json['text']  
         self.timestamp = data.date
         self.tipo_mensagem = data.content_type
-        self.analise_ia(configs=configs)
+        self.analise_ia(llm=llm)
 
-    def analise_ia(self, configs: dict):
-
-        for config in configs:
-            if config['campo'] == 'llm':
-                llm = config['valor']
+    def analise_ia(self, llm: str):
 
         if llm == 'GroqAI':
             analiseIA, categoria, feedback = analise_texto_gropIA(self.texto_msg)

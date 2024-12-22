@@ -15,7 +15,17 @@ def analise_texto_gemini(mensagem: str):
     prompt = gerar_prompt(mensagem)
 
     response = model.generate_content(prompt)
-    return response.text
+
+    # instanciando objeto:
+    try:
+        print('retorno IA: ', response.text)
+        texto = response.choices[0].message.content
+        partes = texto.split(';')
+        texto_formatado = [parte.replace('"', '').replace('.', '') for parte in partes]
+        return texto_formatado[0], texto_formatado[1], texto_formatado[2]
+    except:
+        print("Erro ao gerar Array e instanciar o objeto.")
+        return None, None, None
 
 if __name__ == "__main__":
     analise = analise_texto_gemini('Eu não gostei do serviço!')
