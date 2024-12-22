@@ -27,12 +27,14 @@ class Mensagem(Base):
     texto_msg = Column(String(255), nullable=False)
     timestamp = Column(Integer, nullable=False)
     tipo_mensagem = Column(String(255), nullable=False)
+    respondido = Column(Boolean, nullable=False)
 
     # Colunas campos IA
     llm_id = Column(Integer, ForeignKey('llm.id'))  # Chave estrangeira
     analise_ia = Column(String(255), nullable=True)
     categoria = Column(String(255), nullable=True)
     feedback = Column(String(255), nullable=True)
+    resposta = Column(String(255), nullable=True)
 
     # Relacionamentos
     usuario = relationship("Usuario", back_populates="mensagens")

@@ -1,13 +1,12 @@
 import os
 import telebot
-import speech_recognition as sr
-from pydub import AudioSegment
 from dotenv import load_dotenv
 import random
 import string
 
 from entidades import User, Message
 from repository import salvar_nova_mensagem, select_config
+from audio_handler import convert_audio, transcribe_audio
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -48,29 +47,11 @@ def handle_voice(message):
     transcription = transcribe_audio(wav_file_path)
 
     # Salva informação no banco de dados
-    # save_message_DB(message, transcription)
+    llm = select_config()
+    usuario = User(message.from_user) 
+    mensagem = Message(message, llm, transcription)
+    salvar_nova_mensagem(usuario, mensagem, mensagem.llm)
     bot.send_message(message.chat.id, "Mensagem de aúdio recebida, estaremos analisando.")
-
-
-def convert_audio(input_file, output_file):
-    audio = AudioSegment.from_ogg(input_file)
-    audio.export(output_file, format="wav")
-
-
-def transcribe_audio(audio_path):
-    recognizer = sr.Recognizer()
-    
-    with sr.AudioFile(audio_path) as source:
-        audio_data = recognizer.record(source)
-
-    try:
-        # Transcreve usando a API do Google
-        return recognizer.recognize_google(audio_data, language='pt-BR')
-    except sr.UnknownValueError:
-        return "Não consegui entender o áudio."
-    except sr.RequestError as e:
-        return f"Erro ao conectar ao serviço de reconhecimento de fala: {e}"
-
 
 ## Handler para mensagens tipo Imagem
 @bot.message_handler(content_types=['photo'])
@@ -92,6 +73,13 @@ def handle_photo(message):
     # save_message_DB(message)
     bot.send_message(message.chat.id, "Imagem recebida, estaremos analisando.")
 
+def enviar_mensagem(user_id: int, resposta: str):
+    try:
+        bot.send_message(user_id, resposta)
+        print(f"resposta enviada para o user_id {user_id}: {resposta}")
+    except Exception as e:
+        print(f"Erro ao enviar resposta para o user_id {user_id}: {str(e)}")
+
 def iniciar_telebot():
-    print("bot/aplicação inicilizada...")
+    print("\nbot/aplicação inicializada...")
     bot.polling(none_stop=True)

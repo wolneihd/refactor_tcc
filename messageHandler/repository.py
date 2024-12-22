@@ -73,7 +73,11 @@ def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
 
         if not usuario_bd:
             # Se o usuário não existir, cria e insere no banco
-            usuario_bd = Usuario(nome=usuario.nome, sobrenome=usuario.sobrenome, userID_Telegram=usuario.userID_Telegram)
+            usuario_bd = Usuario(
+                nome=usuario.nome, 
+                sobrenome=usuario.sobrenome, 
+                userID_Telegram=usuario.userID_Telegram
+            )
             session.add(usuario_bd)
             session.commit()
 
@@ -83,6 +87,8 @@ def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
             texto_msg=mensagem.texto_msg,
             timestamp=mensagem.timestamp,
             tipo_mensagem=mensagem.tipo_mensagem,
+            respondido=mensagem.respondido,
+            resposta=mensagem.resposta,
 
             # se IA não analisar corretamente, valor será NONE/NULL.
             llm_id=id_llm,

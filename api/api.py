@@ -11,9 +11,13 @@ def montar_API():
     @app.route('/', methods=['GET'])
     def todas_mensagens():
         data = select_all_mensagens()  
-        print(data)
         return jsonify(data)  
     
+    # consultar todas capitais:
+    @app.route('/responder', methods=['POST'])
+    def responder_mensagens():
+        return jsonify({'teste': [1,2]})  
+
     app.run(port=5001,host='localhost',debug=True)
 
 if __name__ == "__main__":
