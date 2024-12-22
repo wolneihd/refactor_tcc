@@ -18,10 +18,11 @@ def analise_texto_gemini(mensagem: str):
 
     # instanciando objeto:
     try:
+        texto = response.text
         print('retorno IA: ', response.text)
-        texto = response.choices[0].message.content
+        # texto = response.choices[0].message.content
         partes = texto.split(';')
-        texto_formatado = [parte.replace('"', '').replace('.', '') for parte in partes]
+        texto_formatado = [parte.replace('"', '').replace('.', '').replace('\n', '') for parte in partes]
         return texto_formatado[0], texto_formatado[1], texto_formatado[2]
     except:
         print("Erro ao gerar Array e instanciar o objeto.")
