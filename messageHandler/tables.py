@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, create_engine, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, create_engine, ForeignKey, BigInteger
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
@@ -10,7 +10,7 @@ class Usuario(Base):
     id = Column(Integer, primary_key=True)  # Chave primária
     nome = Column(String(255), nullable=False)  # Especificando o comprimento máximo
     sobrenome = Column(String(255), nullable=False)  # Especificando o comprimento máximo
-    userID_Telegram = Column(Integer, nullable=False)
+    userID_Telegram = Column(BigInteger, nullable=False)
 
     # Relacionamento com a tabela Mensagem
     mensagens = relationship("Mensagem", back_populates="usuario", cascade="all, delete-orphan")
