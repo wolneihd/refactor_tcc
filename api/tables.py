@@ -9,4 +9,4 @@ class Totem(Base):
 
     id = Column(Integer, primary_key=True)
     status = Column(String(50), nullable=False)
-    data_hora = Column(DateTime, nullable=False, default=datetime.now(datetime.timezone.utc))  # Define valor padrão como a data e hora atual
+    data_hora = Column(DateTime, nullable=False, default=datetime.now())  # Define valor padrão como a data e hora atual
