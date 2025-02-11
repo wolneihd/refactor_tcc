@@ -62,13 +62,19 @@ def select_all_mensagens():
                     usuario['mensagens'].append(mensagem)
         return users
 
+# Função corrigida para inserir um registro
 def insert_feedback_totem(status_totem: str):
-    session.add(Totem(
-        status=status_totem,
-        data_hora=datetime.now()
-    ))
-    session.commit()
-    return f'Salva a mensagem nova do TOTEM no BD'
+    try:
+        novo_totem = Totem(status=status_totem) 
+        session.add(novo_totem)
+        session.commit()
+        session.refresh(novo_totem)  # Atualiza o objeto com os dados do BD
+        return f'Mensagem salva com sucesso! ID: {novo_totem.id}'
+    except Exception as error:
+        session.rollback()  # Reverte alterações em caso de erro
+        return f'Erro ao salvar no BD: {error}'
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
 
 if __name__ == "__main__":
     print(select_all_mensagens())

@@ -24,8 +24,8 @@ def montar_API():
     def salvar_mensagem():
         # Obter dados do corpo da requisição
         dados = request.get_json()
-        insert_feedback_totem(status_totem=dados.get('status'))
-        return jsonify({'teste': [1,2]})  
+        retorno = insert_feedback_totem(status_totem=dados.get('status'))
+        return jsonify({'retorno': retorno})  
 
     app.run(port=5000,host="0.0.0.0",debug=True)
 
