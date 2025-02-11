@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import select_all_mensagens
+from repository import create_tables, insert_feedback_totem
 
 def montar_API():
     # motando API
@@ -23,10 +24,11 @@ def montar_API():
     def salvar_mensagem():
         # Obter dados do corpo da requisição
         dados = request.get_json()
-        print(dados)
+        insert_feedback_totem(status_totem=dados.get('status'))
         return jsonify({'teste': [1,2]})  
 
     app.run(port=5000,host="0.0.0.0",debug=True)
 
 if __name__ == "__main__":
+    create_tables()
     montar_API()

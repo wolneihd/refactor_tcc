@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from entidades import User, Message
+from tables import Base, Totem
+import datetime
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -17,6 +19,14 @@ DATABASE_URL = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABAS
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 Session = sessionmaker(bind=engine)
 session = Session()
+
+def create_tables():
+    try:
+        print("Creating tables if they don't exist...")
+        Base.metadata.create_all(engine)
+        print("Tables successfully created or already exist.")
+    except Exception as e:
+        print(f"Error creating tables: {e}")
 
 def select_all_mensagens():
     with engine.connect() as connection:
@@ -51,6 +61,14 @@ def select_all_mensagens():
                 if usuario['id'] == mensagem['usuario_id']:
                     usuario['mensagens'].append(mensagem)
         return users
+
+def insert_feedback_totem(status_totem: str):
+    session.add(Totem(
+        status=status_totem,
+        data_hora=datetime.now()
+    ))
+    session.commit()
+    return f'Salva a mensagem nova do TOTEM no BD'
 
 if __name__ == "__main__":
     print(select_all_mensagens())
