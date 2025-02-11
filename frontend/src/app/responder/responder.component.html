@@ -1,14 +1,16 @@
-<div>
-  <h3>Campos para responder a mensagem ao cliente</h3>
+<div class="responder">
+  <div class="header">
+    <h3>Campos para responder a mensagem ao cliente</h3>
+  </div>
+
+  <p>{{mensagem.texto_msg}}</p>
+
+  <textarea name="complemento" id="complemento" placeholder="informação adicional para a IA"></textarea>
+
+  <button >Gerar resposta com IA</button>
+
+  <p>... texto resposta da IA ... </p>
+
+  <button> enviar </button>
+  <button> cancelar </button>
 </div>
-
-<p>{{mensagem.texto_msg}}</p>
-
-<textarea name="complemento" id="complemento" placeholder="informação adicional para a IA"></textarea>
-
-<button >Gerar resposta com IA</button>
-
-<p>... texto resposta da IA ... </p>
-
-<button> enviar </button>
-<button> cancelar </button>
