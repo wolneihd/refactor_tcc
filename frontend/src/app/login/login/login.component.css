@@ -89,14 +89,13 @@ button:hover {
   font-size: 14px;
   color: black;
   text-decoration: none;
+  cursor: pointer;
 }
-
-/* Dados do footer: */
 
 footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 90%;
   text-align: center;
   padding: 20px;
 }
@@ -105,7 +104,7 @@ footer {
   display: flex;
   align-items: center;
   margin-left: 16%;
-  margin-right: 16%;
+  margin-right: 14%;
   border-top: 1px solid #ccc;
 }
 
@@ -156,4 +155,5 @@ footer {
   color: black;
   font-size: 14px;
   margin-top: 15px;
+  cursor: pointer;
 }

@@ -11,11 +11,10 @@
     <label for="password">Senha</label>
     <div class="password-container">
       <input type="password" id="password" placeholder="Digite sua senha">
-      <i class="fas fa-eye" id="togglePassword"></i>
     </div>
 
     <button type="submit">Login</button>
-    <a href="#" class="forgot-password">Esqueceu sua senha?</a>
+    <p class="forgot-password" mat-button (click)="abrirDialogResetSenha()">Esqueceu sua senha?</p>
   </form>
 </div>
 
@@ -25,8 +24,12 @@
     <div class="footer-logo-redes">
       <h2>eAI?</h2>
       <div class="social-icons">
-        <i class="fab fa-instagram"></i>
-        <i class="fab fa-youtube"></i>
+        <a href="https://www.instagram.com/">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/">
+          <i class="fab fa-youtube"></i>
+        </a>
         <i class="fab fa-linkedin"></i>
       </div>
     </div>
@@ -36,9 +39,9 @@
         <p>Informações</p>
       </div>
       <div class="contato">
-        <p><a href="#">Contato</a></p>
+        <p mat-button (click)="abrirDialogContato()">Contato</p>
       </div>
     </div>
-    
+
   </div>
 </footer>
