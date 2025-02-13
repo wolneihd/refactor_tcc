@@ -79,7 +79,7 @@ void mostrarMensagem() {
 void httpPOST(char feedback) {
     if (WiFi.status() == WL_CONNECTED) {
       HTTPClient http;
-      http.begin("http://192.168.1.5:5000");
+      http.begin("http://192.168.1.5:5000/totem");
       http.addHeader("Content-Type", "application/json");
 
       Serial.println("Enviando requisição...");
