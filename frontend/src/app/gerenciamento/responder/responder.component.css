@@ -1,0 +1,8 @@
+.responder {
+  display: flex;
+}
+
+textarea {
+  width: 400px;
+  height: 120px;
+}

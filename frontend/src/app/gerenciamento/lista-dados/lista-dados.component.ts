@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Usuario } from '../entidades/Usuarios';
+import { Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
-import { Mensagem } from '../entidades/Usuarios';
+import { Mensagem } from '../../entidades/Usuarios';
 import { ResponderComponent } from '../responder/responder.component';
 import { Router } from '@angular/router';
 

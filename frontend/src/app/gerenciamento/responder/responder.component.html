@@ -1,0 +1,26 @@
+<div class="responder">
+  <div class="lista-mensagens">
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+    <p>Pariatur, doloremque. Nam, tenetur unde, quisquam aspernatur aperiam incidunt modi amet</p>
+    <p>Nesciunt voluptates neque dolorum vel fugit officiis illum dolore illo quam.</p>
+    <p>Fuga minima, minus facere commodi nisi vero fugit iusto sit hic exercitationem quis?</p>
+    <p>Necessitatibus quaerat non ex aperiam dignissimos nemo vel iusto?</p>
+  </div>
+  <div class="prompt">
+    <h6>Entre com informações adicionais para a IA</h6>
+    <textarea name="complemento" id="complemento" placeholder="Digite aqui seu contexto adicional"></textarea>
+    <div>
+      <button class="btn btn-light" (click)="gerarResposta()">Gerar</button>
+    </div>
+  </div>
+  <div>
+    @if (divResponder === true) {
+      <h6>Editar a mensagem gerada pela IA antes de enviar ao usuário</h6>
+      <textarea name="complemento" id="complemento" placeholder="Digite aqui seu contexto adicional"></textarea>
+      <div>
+        <button class="btn btn-light"(click)="fecharResposta()">Cancelar</button>
+        <button class="btn btn-dark" (click)="enviarResposta()">Enviar</button>
+      </div>
+    }
+  </div>
+</div>

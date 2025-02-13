@@ -30,4 +30,8 @@ export class LoginComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  abrirTelaPrincipal() {
+    window.location.href = 'http://localhost:4200/gerenciamento';
+  }
 }

@@ -1,0 +1,16 @@
+<div class="barra-nav">
+  <app-navbar></app-navbar>
+</div>
+
+<div class="filtrar-responder">
+  <!-- <p>filtro</p> -->
+  @if (btnResponder === true) {
+    <app-responder></app-responder>
+  } @else {
+   <app-filtrar></app-filtrar>
+  }
+</div>
+
+<div>
+  <app-lista-dados></app-lista-dados>
+</div>
