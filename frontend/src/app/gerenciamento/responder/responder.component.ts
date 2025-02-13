@@ -14,11 +14,6 @@ export class ResponderComponent {
   divResponder:boolean = true;
   mensagem!: Mensagem;
 
-  ngOnInit() {
-    this.mensagem = history.state.mensagem; // Acessa o objeto mensagem
-    console.log('Dados recebidos:', this.mensagem);
-  }
-
   gerarResposta() {
     this.divResponder = !this.divResponder;
   }

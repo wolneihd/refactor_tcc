@@ -43,3 +43,7 @@ button {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.btn-cursor {
+  cursor: pointer;
+}

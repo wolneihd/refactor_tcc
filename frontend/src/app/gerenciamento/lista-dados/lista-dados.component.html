@@ -4,16 +4,17 @@
 
 <div class="container">
   <div class="usuarios">
-    <!-- <button>minimizar</button> -->
+    <p class="head-tabela">Usuários</p>
     <table>
         <tr>
             <th>ID</th>
             <th>Nome</th>
             <th>Sobrenome</th>
             <th>ID Telegram</th>
+            <th>Mensagens</th>
             <th>Ação</th>
         </tr>
-        <tr *ngFor="let usuario of usuarios">
+        <!-- <tr *ngFor="let usuario of usuarios">
             <td>{{usuario.id}}</td>
             <td>{{usuario.nome}}</td>
             <td>{{usuario.sobrenome}}</td>
@@ -21,10 +22,20 @@
             <td class="td-center-edit" (click)="verMensagem(usuario.mensagens)">
               <button>Ver Mensagens</button>
           </td>
+        </tr> -->
+        <tr>
+          <td>1</td>
+          <td>João</td>
+          <td>Almeida</td>
+          <td>123456789</td>
+          <td>1</td>
+          <td>Abrir</td>
         </tr>
     </table>
   </div>
+
   <div class="mensagens">
+    <p class="head-tabela">Mensagens</p>
     <table>
       <tr>
           <th>ID</th>
@@ -37,7 +48,7 @@
           <th>Info.</th>
           <th>Ação</th>
       </tr>
-      <tr *ngFor="let mensagem of mensagens">
+      <!-- <tr *ngFor="let mensagem of mensagens">
           <td>{{mensagem.id}}</td>
           <td>{{mensagem.llm}}</td>
           <td>{{mensagem.timestamp}}</td>
@@ -52,7 +63,18 @@
             <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
             <button (click)="responderMensagem(mensagem)">Responder</button>
           </td>
-      </tr>
+      </tr> -->
+      <tr>
+        <td>01</td>
+        <td>GropIA</td>
+        <td>13/02/2025 17:48</td>
+        <td>Texto</td>
+        <td>Positivo</td>
+        <td>Organização</td>
+        <td class="resumo-ia">Lorem ipsum dolor sit amet</td>
+        <td>Ver</td>
+        <td>Selecionar</td>
+    </tr>
   </table>
   </div>
 </div>

@@ -1,21 +1,31 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ShareService } from '../../services/share.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ContatoComponent } from '../../login/contato/contato.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [],
+  imports: [MatDialogModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
 
-  constructor(private router: Router) { }
+  readonly dialog = inject(MatDialog);
+
+  constructor(private shareService: ShareService) { }
 
   responderMensagem() {
-    this.router.navigate(['/gerenciamento'], {
-      state: { filtrar: true, mensagem: "Filtragem ativada" },
+    console.log('Abrir caixa de filtro:'); // Depuração
+    this.shareService.changeValue('filtrar');
+  }
+
+  abrirDialogContato() {
+    const dialogRef = this.dialog.open(ContatoComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
-    console.log('enviado...')
   }
 }

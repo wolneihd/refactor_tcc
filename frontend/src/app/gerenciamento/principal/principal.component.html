@@ -6,11 +6,12 @@
   <!-- <p>filtro</p> -->
   @if (btnResponder === true) {
     <app-responder></app-responder>
-  } @else {
+  }
+  @if (btnFiltrar === true) {
    <app-filtrar></app-filtrar>
   }
 </div>
 
-<div>
+<div class="tabela">
   <app-lista-dados></app-lista-dados>
 </div>

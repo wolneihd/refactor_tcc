@@ -4,7 +4,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { ResponderComponent } from "../responder/responder.component";
 import { CommonModule } from '@angular/common';
 import { FiltrarComponent } from "../filtrar/filtrar.component";
-import { Router } from '@angular/router';
+import { ShareService } from '../../services/share.service';
 
 @Component({
   selector: 'app-principal',
@@ -15,17 +15,24 @@ import { Router } from '@angular/router';
 })
 export class PrincipalComponent {
 
-  btnResponder:boolean = true;
+  btnResponder:boolean = false;
   btnFiltrar:boolean = false;
+  public boxFiltrarResponder:string = '';
 
-  filtrar: boolean = false;
-  mensagemRecebida: string = ''; // Variável para armazenar a mensagem
+  constructor(private shareService: ShareService) {}
 
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    this.filtrar = history.state.filtrar; // Acessa o objeto mensagem
-    console.log('Dados recebidos...', this.filtrar);
+  ngOnInit(): void {
+    this.shareService.value.subscribe(texto => {
+      console.log('Mensagem recebida:', texto); 
+      this.boxFiltrarResponder = texto;
+      if (texto === 'filtrar' && this.btnFiltrar === false) {
+        this.btnResponder = false;
+        this.btnFiltrar = true;
+      } else {
+        this.btnResponder = false;
+        this.btnFiltrar = false;
+      }
+    });
   }
 
 }
