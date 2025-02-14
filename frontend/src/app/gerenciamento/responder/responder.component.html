@@ -1,10 +1,8 @@
-<div class="responder">
+<div class="responder" *ngIf="this.responderSelecionado">
   <div class="lista-mensagens">
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-    <p>Pariatur, doloremque. Nam, tenetur unde, quisquam aspernatur aperiam incidunt modi amet</p>
-    <p>Nesciunt voluptates neque dolorum vel fugit officiis illum dolore illo quam.</p>
-    <p>Fuga minima, minus facere commodi nisi vero fugit iusto sit hic exercitationem quis?</p>
-    <p>Necessitatibus quaerat non ex aperiam dignissimos nemo vel iusto?</p>
+    @for (item of this.mensagensSelecionadas; track $index) {
+      <p>{{item.texto_msg}}</p>
+    }
   </div>
   <div class="prompt">
     <h6>Entre com informações adicionais para a IA</h6>

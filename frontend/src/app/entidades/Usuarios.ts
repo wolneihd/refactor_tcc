@@ -8,7 +8,8 @@ export interface Mensagem {
   texto_msg: string;
   timestamp: number;
   tipo_mensagem: string;
-  usuario_id: number
+  usuario_id: number;
+  checkbox: boolean;
 }
 
 // usuario
