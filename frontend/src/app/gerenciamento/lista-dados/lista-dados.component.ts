@@ -3,15 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
 import { Mensagem } from '../../entidades/Usuarios';
-import { ResponderComponent } from '../responder/responder.component';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
 
 @Component({
   selector: 'app-lista-dados',
   standalone: true,
-  imports: [CommonModule, ResponderComponent, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './lista-dados.component.html',
   styleUrl: './lista-dados.component.css'
 })
@@ -20,7 +18,7 @@ export class ListaDadosComponent {
   usuarios: Usuario[] = [];
   mensagens: Mensagem[] = [];
 
-  responderSelecionado: boolean = false;
+  isResponderSelecionado: boolean = false;
   btnResponder: boolean = false;
   usuarioSelecionado: number = -1;
 
@@ -51,14 +49,15 @@ export class ListaDadosComponent {
 
   verMensagens(mensagens: Mensagem[], id: number) {
     this.mensagens = mensagens;
-    this.responderSelecionado = false;
     this.btnResponder = true;
-    this.usuarioSelecionado = id;
+    this.usuarioSelecionado = id
+
   }
 
   responderMensagem(usuarios: Usuario[]) {
-    this.responderSelecionado = true;
-    this.share.shareMensagem(usuarios, this.usuarioSelecionado)
+    this.share.shareMensagem(usuarios, this.usuarioSelecionado);
+    this.isResponderSelecionado = !this.isResponderSelecionado;
+    this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado);
   }
 
   verUmaMensagem(mensagem: Mensagem) {

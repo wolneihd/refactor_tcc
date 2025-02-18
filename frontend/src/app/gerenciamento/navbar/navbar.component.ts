@@ -13,12 +13,13 @@ import { ContatoComponent } from '../../login/contato/contato.component';
 export class NavbarComponent {
 
   readonly dialog = inject(MatDialog);
+  isFiltrarSelecionado: boolean = false;
 
   constructor(private shareService: ShareService) { }
 
   responderMensagem() {
-    console.log('Abrir caixa de filtro:'); // Depuração
-    this.shareService.changeValue('filtrar');
+    this.isFiltrarSelecionado = !this.isFiltrarSelecionado;
+    this.shareService.mostrarFiltrarResponder(this.isFiltrarSelecionado, false);
   }
 
   abrirDialogContato() {

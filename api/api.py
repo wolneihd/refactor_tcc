@@ -14,6 +14,11 @@ def montar_API():
         data = select_all_mensagens()  
         return jsonify(data)  
     
+    # gerar sugestão resposta com IA:
+    @app.route('/gerar_resposta', methods=['POST'])
+    def gerar_resposta():
+        return jsonify({'teste': [1,2]})  
+    
     # responder mensagem do usuário:
     @app.route('/responder', methods=['POST'])
     def responder_mensagens():

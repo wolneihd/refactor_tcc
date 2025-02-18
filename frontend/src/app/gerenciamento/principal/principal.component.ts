@@ -15,24 +15,18 @@ import { ShareService } from '../../services/share.service';
 })
 export class PrincipalComponent {
 
-  btnResponder:boolean = false;
-  btnFiltrar:boolean = false;
-  public boxFiltrarResponder:string = '';
+  divResponder:boolean = false;
+  divFiltrar:boolean = false;
 
   constructor(private shareService: ShareService) {}
 
   ngOnInit(): void {
-    this.shareService.value.subscribe(texto => {
-      console.log('Mensagem recebida:', texto); 
-      this.boxFiltrarResponder = texto;
-      if (texto === 'filtrar' && this.btnFiltrar === false) {
-        this.btnResponder = false;
-        this.btnFiltrar = true;
-      } else {
-        this.btnResponder = false;
-        this.btnFiltrar = false;
-      }
-    });
+    this.shareService.filtrar$.subscribe(filtrar => {
+      this.divFiltrar = filtrar;
+    })
+    this.shareService.responder$.subscribe(responder => {
+      this.divResponder = responder;
+    })
   }
 
 }

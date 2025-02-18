@@ -12,19 +12,18 @@ import { ShareService } from '../../services/share.service';
 })
 export class ResponderComponent {
 
-  divResponder: boolean = true;
+  divResponder: boolean = false;
   mensagem!: Mensagem;
 
   usuarios: Usuario[] = [];
   mensagensSelecionadas: Mensagem[] = [];
   id: number = 0;
 
-  responderSelecionado: boolean = false;
+  isResponderSelecionado: boolean = false;
 
   constructor(private share: ShareService) { }
 
   ngOnInit(): void {
-    this.responderSelecionado = true
     this.share.usuarios$.subscribe(usuarios => {
       this.usuarios = usuarios
     })
@@ -47,11 +46,13 @@ export class ResponderComponent {
   }
 
   enviarResposta() {
-    this.responderSelecionado = false;
-    alert('Enviar resposta!');
+    this.isResponderSelecionado = false;
+    this.share.mostrarFiltrarResponder(this.isResponderSelecionado, false);
+    alert('TODO: Enviar resposta!');
   }
 
   fecharResposta() {
-    this.responderSelecionado = false;
+    this.isResponderSelecionado = false;
+    this.share.mostrarFiltrarResponder(this.isResponderSelecionado, false);
   }
 }
