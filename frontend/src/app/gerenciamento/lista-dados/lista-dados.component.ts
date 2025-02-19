@@ -70,4 +70,19 @@ export class ListaDadosComponent {
   verUmaMensagem(mensagem: Mensagem) {
     alert(mensagem.texto_msg)
   }
+
+  converterTimestampData(timestamp: number): string {
+    const data = new Date(timestamp * 1000);
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0'); // Mês começa do 0
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  converterTimestampHora(timestamp: number): string {
+    const data = new Date(timestamp * 1000);
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
+  }
 }

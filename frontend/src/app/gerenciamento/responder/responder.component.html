@@ -14,7 +14,7 @@
   <div class="box">
     @if (divResponder === true) {
       <h6>Editar a mensagem gerada pela IA antes de enviar ao usuário</h6>
-      <textarea name="complemento" id="complemento" placeholder="Digite aqui seu contexto adicional"></textarea>
+      <textarea name="complemento" id="complemento" placeholder="Digite aqui seu contexto adicional" [(ngModel)]="respostaIA.resposta"></textarea>
       <div>
         <button class="btn btn-light"(click)="fecharResposta()">Cancelar</button>
         <button class="btn btn-dark" (click)="enviarResposta()">Enviar</button>

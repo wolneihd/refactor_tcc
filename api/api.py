@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import select_all_mensagens
 from repository import create_tables, insert_feedback_totem
+from gerar_resposta import gerar_resposta_ia
 
 import os
 from dotenv import load_dotenv
@@ -25,8 +26,8 @@ def montar_API():
     @app.route('/gerar_resposta', methods=['POST'])
     def gerar_resposta():
         dados = request.get_json()
-        print(dados)
-        return jsonify({'teste': [1,2]})  
+        retorno = gerar_resposta_ia(dados)
+        return jsonify({'resposta': retorno})  
     
     # responder mensagem do usuário:
     @app.route('/responder', methods=['POST'])

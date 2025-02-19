@@ -36,6 +36,7 @@
       <tr>
         <th>ID</th>
         <th>LLM</th>
+        <th>Data</th>
         <th>Horário</th>
         <th>Tipo</th>
         <th>Análise IA</th>
@@ -47,7 +48,8 @@
       <tr *ngFor="let mensagem of mensagens">
         <td>{{mensagem.id}}</td>
         <td>{{mensagem.llm}}</td>
-        <td>{{mensagem.timestamp}}</td>
+        <td>{{converterTimestampData(mensagem.timestamp)}}</td>
+        <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
         <td>{{mensagem.tipo_mensagem}}</td>
         <td>{{mensagem.analise_ia}}</td>
         <td>{{mensagem.categoria}}</td>

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
+import { Resposta } from '../../entidades/Resposta';
 
 @Component({
   selector: 'app-responder',
@@ -23,6 +24,7 @@ export class ResponderComponent {
 
   isResponderSelecionado: boolean = false;
   promptAdicionalUsuario: string = '';
+  respostaIA!: Resposta;
 
   constructor(
     private share: ShareService,
@@ -50,7 +52,9 @@ export class ResponderComponent {
   gerarResposta() {
     this.divResponder = !this.divResponder;
     this.api.gerarRespostaIA(this.promptAdicionalUsuario, this.mensagensSelecionadas).subscribe({
-      next: () => { },
+      next: (resposta) => {
+        this.respostaIA = resposta;
+      },
       error: erro => {
         console.error(erro)
         alert("Erro ao carregar os jogos");
