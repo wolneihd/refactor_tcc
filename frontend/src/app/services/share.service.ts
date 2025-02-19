@@ -25,7 +25,7 @@ export class ShareService {
   mostrarFiltrarResponder(filtrar: boolean, responder: boolean) {
     this.boxFiltrar.next(filtrar);
     this.boxResponder.next(responder);
-  }  
+  }
 
   // Métodos para atualizar os dados
   shareMensagem(usuarios: Usuario[], id: number): void {

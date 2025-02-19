@@ -1,9 +1,13 @@
 .responder {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 textarea {
   width: 400px;
   height: 120px;
+}
+
+.box {
+  margin-right: 15px;
 }

@@ -3,6 +3,13 @@ from flask_cors import CORS
 from repository import select_all_mensagens
 from repository import create_tables, insert_feedback_totem
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+HOST = os.getenv('API_HOST')
+PORT = int(os.getenv('API_PORT'))
+
 def montar_API():
     # motando API
     app = Flask(__name__)
@@ -34,7 +41,7 @@ def montar_API():
         retorno = insert_feedback_totem(status_totem=dados.get('status'))
         return jsonify({'retorno': retorno})  
 
-    app.run(port=5000,host="0.0.0.0",debug=True)
+    app.run(port=PORT,host=HOST,debug=True)
 
 if __name__ == "__main__":
     create_tables()
