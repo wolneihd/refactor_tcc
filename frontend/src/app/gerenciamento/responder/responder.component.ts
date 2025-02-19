@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { Mensagem, Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
 import { ShareService } from '../../services/share.service';
+import { ApiService } from '../../services/api.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-responder',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './responder.component.html',
   styleUrl: './responder.component.css'
 })
@@ -20,8 +22,12 @@ export class ResponderComponent {
   id: number = 0;
 
   isResponderSelecionado: boolean = false;
+  promptAdicionalUsuario: string = '';
 
-  constructor(private share: ShareService) { }
+  constructor(
+    private share: ShareService,
+    private api: ApiService
+  ) { }
 
   ngOnInit(): void {
     this.share.usuarios$.subscribe(usuarios => {
@@ -43,6 +49,13 @@ export class ResponderComponent {
 
   gerarResposta() {
     this.divResponder = !this.divResponder;
+    this.api.gerarRespostaIA(this.promptAdicionalUsuario, this.mensagensSelecionadas).subscribe({
+      next: () => { },
+      error: erro => {
+        console.error(erro)
+        alert("Erro ao carregar os jogos");
+      }
+    })
   }
 
   enviarResposta() {

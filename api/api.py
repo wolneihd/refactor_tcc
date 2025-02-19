@@ -17,6 +17,8 @@ def montar_API():
     # gerar sugestão resposta com IA:
     @app.route('/gerar_resposta', methods=['POST'])
     def gerar_resposta():
+        dados = request.get_json()
+        print(dados)
         return jsonify({'teste': [1,2]})  
     
     # responder mensagem do usuário:

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Mensagem } from '../../entidades/Usuarios';
 import { FormsModule } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-lista-dados',
@@ -24,11 +25,17 @@ export class ListaDadosComponent {
 
   constructor(
     private httpClient: HttpClient,
-    private share: ShareService
+    private share: ShareService,
+    private api: ApiService
   ) { }
 
-  ngOnInit() {
-    this.buscarDados()
+  ngOnInit(){
+    this.api.obterDadosTabela().subscribe({
+      next: res => this.usuarios = res,
+      error: erro => {
+        console.error(erro)
+      }
+    })
   }
 
   buscarDados() {
