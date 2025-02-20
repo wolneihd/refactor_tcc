@@ -1,7 +1,7 @@
 from repository import create_tables, incluir_LLMs
 from telegram import iniciar_telebot
 from database import criar_database
-from responder_mensagens import rpa_responder_mensagens
+# from responder_mensagens import rpa_responder_mensagens
 from api_enviar_resposta import montar_API
 import threading
 

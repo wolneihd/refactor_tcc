@@ -7,3 +7,5 @@ mysql-connector-python
 python-dotenv
 sqlalchemy
 pyTelegramBotAPI
+flask
+flask_cors

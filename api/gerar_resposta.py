@@ -1,6 +1,6 @@
 from groqIA import analise_texto_gropIA
 
-def gerar_resposta_ia(dados: dict) -> str | None:
+def gerar_resposta_ia(dados: dict):
 
     # criar array com todas as mensagens:
     mensagens = []
