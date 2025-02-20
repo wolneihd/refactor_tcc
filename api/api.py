@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import select_all_mensagens
-from repository import create_tables, insert_feedback_totem
+from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd
 from gerar_resposta import gerar_resposta_ia
+from enviar_resposta import obter_dados_resposta
 
 import os
 from dotenv import load_dotenv
@@ -28,11 +29,15 @@ def montar_API():
         dados = request.get_json()
         retorno = gerar_resposta_ia(dados)
         return jsonify({'resposta': retorno})  
+        # return jsonify({'resposta': 'teste'})  
     
     # responder mensagem do usuário:
     @app.route('/responder', methods=['POST'])
     def responder_mensagens():
-        return jsonify({'teste': [1,2]})  
+        dados = request.get_json()
+        ids, resposta = obter_dados_resposta(dados)
+        atualizar_resposta_bd(ids, resposta)
+        return jsonify({'dados': dados})  
     
     # salvar mensagem do totem de feedback:
     @app.route('/totem', methods=['POST'])

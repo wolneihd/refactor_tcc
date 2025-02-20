@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from entidades import User, Message
 from tables import Base, Totem
-import datetime
+from database import conectar_database
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -73,6 +73,21 @@ def insert_feedback_totem(status_totem: str):
     except Exception as error:
         session.rollback()  # Reverte alterações em caso de erro
         return f'Erro ao salvar no BD: {error}'
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
+
+def atualizar_resposta_bd(ids: list, resposta: str):
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        for id in ids:
+            cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta, id))
+            conexao.commit()
+            print(f'id {id} atualizado com sucesso!')
+
+    except Exception as error:
+        print('Erro ao atualizar BD: ', error)
     finally:
         session.close()  # Fecha a sessão para evitar conexões abertas
 

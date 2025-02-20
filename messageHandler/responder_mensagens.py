@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from telegram import enviar_mensagem
-
+from database import conectar_database
 import time
 
 # Carregar variáveis de ambiente
@@ -14,38 +14,23 @@ DATABASE = os.getenv('DATABASE')
 PORT = os.getenv('PORT') 
 HOST = os.getenv('HOST')
 
-# URL de conexão com o MySQL
-DATABASE_URL = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-Session = sessionmaker(bind=engine)
-session = Session()
+# Obter ID Telegram
+def obter_id_telegram(id: int):
 
-def rpa_responder_mensagens():
-    print('inicializado monitoramento de mensagens pendentes de envio.\n')
-    while True:
-        time.sleep(10)
-        print('Conferindo se há mensagens pendentes de respostas...')
-        with engine.connect() as connection:
-            # objetos em mapping
-            mensagens = connection.execute(text("""
-            select 
-	            mensagens.id, 
-                mensagens.respondido, 
-                mensagens.resposta,
-                usuarios.userID_Telegram
-                from mensagens 
-                INNER JOIN usuarios ON usuarios.id = mensagens.usuario_id
-                where resposta is not NULL and respondido = 0;
-            """)).mappings()
-            mensagens = [row for row in mensagens]  # Cada linha já é um dicionário
-            if len(mensagens) > 0:
-                for mensagem in mensagens:
-                    enviar_mensagem(mensagem['userID_Telegram'], mensagem['resposta'])
-                    connection.execute(text(f"UPDATE mensagens set respondido = TRUE where id = {mensagem['id']};"))
-                    connection.commit()
-                    print(f'Mensagem id: {mensagem['id']} - atualizada para respondido.')
-            else:
-                print(f'Sem mensagens pendentes de atualização.')
+    try:
+
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+        cursor.execute("select userID_Telegram from usuarios where id = %s;", (id,))
+
+        id_telegram = cursor.fetchone()
+        print(f'Id TELEGRAM: {id_telegram[0]}')
+        return id_telegram[0]
+
+    except Exception as error:
+        print(f"erro método 'obter_id_enviar_mensagem_telegram': ", error)
+    finally:
+        conexao.close()
 
 if __name__ == "__main__":
-    rpa_responder_mensagens()
+    pass

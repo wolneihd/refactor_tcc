@@ -27,4 +27,12 @@ export class ApiService {
     }
     return this.httpClient.post<Resposta>(`${apiUrl}/gerar_resposta`, dados)
   }
+
+  enviarResposta(mensagens: Mensagem[], resposta: string): Observable<any>{
+    const dados = {
+      "mensagens": mensagens,
+      "resposta": resposta
+    }
+    return this.httpClient.post<any>(`${apiUrl}/responder`, dados)
+  }
 }
