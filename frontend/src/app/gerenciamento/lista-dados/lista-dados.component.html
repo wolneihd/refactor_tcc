@@ -1,0 +1,66 @@
+<!-- <div class="responder">
+  <app-responder></app-responder>
+</div> -->
+
+<div class="container">
+  <div class="usuarios">
+    <p class="head-tabela">Usuários</p>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Sobrenome</th>
+        <th>ID Telegram</th>
+        <th>Mensagens</th>
+        <th>Ação</th>
+      </tr>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{usuario.id}}</td>
+        <td>{{usuario.nome}}</td>
+        <td>{{usuario.sobrenome}}</td>
+        <td>{{usuario.userID_Telegram}}</td>
+        <td>{{usuario.mensagens.length}}</td>
+        <td (click)="verMensagens(usuario.mensagens, usuario.id)">
+          <button class="btn btn-light">Abrir</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="mensagens">
+    <div class="head-tabela-msgs">
+      <p class="head-tabela">Mensagens</p>
+      <button class="btn btn-light" (click)="responderMensagem(usuarios)" *ngIf="btnResponder">Responder</button>
+    </div>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>LLM</th>
+        <th>Data</th>
+        <th>Horário</th>
+        <th>Tipo</th>
+        <th>Análise IA</th>
+        <th>Categoria</th>
+        <th>Resumo</th>
+        <th>Visualizar</th>
+        <th>Selecionar</th>
+      </tr>
+      <tr *ngFor="let mensagem of mensagens">
+        <td>{{mensagem.id}}</td>
+        <td>{{mensagem.llm}}</td>
+        <td>{{converterTimestampData(mensagem.timestamp)}}</td>
+        <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
+        <td>{{mensagem.tipo_mensagem}}</td>
+        <td>{{mensagem.analise_ia}}</td>
+        <td>{{mensagem.categoria}}</td>
+        <td>{{mensagem.feedback}}</td>
+        <td class="td-center-edit">
+          <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button>
+        </td>
+        <td>
+          <input type="checkbox" (click)="checkSelecionado(mensagem)">
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

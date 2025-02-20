@@ -1,0 +1,11 @@
+SpeechRecognition
+pydub
+langchain-openai
+google-generativeai
+groq
+mysql-connector-python
+python-dotenv
+sqlalchemy
+pyTelegramBotAPI
+flask
+flask_cors

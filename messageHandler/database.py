@@ -29,6 +29,16 @@ def conectar():
     )
     return conexao
 
+def conectar_database():
+    conexao = mysql.connector.connect(
+        host=db_host,
+        port=db_port,
+        user=db_user,
+        password=db_password,
+        database=db_name
+    )
+    return conexao
+
 def criar_database():
     try:
         conexao = conectar()

@@ -1,0 +1,63 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: angular-app
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./:/angular-app
+
+  db:
+    image: mysql:5.7
+    restart: always
+    env_file:
+      - ./api/.env
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      # MYSQL_USER: ${USER}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+    ports:
+      - '3307:3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - backend_network  
+
+  mensageria:
+    build:
+      context: ./messageHandler
+      dockerfile: Dockerfile
+    container_name: mensageria
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./messageHandler/.env
+    volumes:
+      - ./messageHandler:/messageHandler
+    networks:
+      - backend_network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/api
+    networks:
+      - backend_network
+
+volumes:
+  my-db:  # Definindo o volume persistente 'my-db'
+
+networks:
+  backend_network:
+    driver: bridge
+    name: backend_network

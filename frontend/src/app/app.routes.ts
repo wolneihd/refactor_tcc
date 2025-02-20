@@ -1,9 +1,24 @@
 import { Routes } from '@angular/router';
-import { ListaDadosComponent } from './lista-dados/lista-dados.component';
-import { ResponderComponent } from './responder/responder.component';
+import { ListaDadosComponent } from './gerenciamento/lista-dados/lista-dados.component';
+import { ResponderComponent } from './gerenciamento/responder/responder.component';
+import { LoginComponent } from './login/login/login.component';
+import { PrincipalComponent } from './gerenciamento/principal/principal.component';
 
 export const routes: Routes = [
-  { path: 'app-lista-dados', component: ListaDadosComponent },
-  { path: 'app-responder', component: ResponderComponent },
-  // { path: '', redirectTo: '/app-lista-dados', pathMatch: 'full' },
+  {
+    path: 'main',
+    component: ListaDadosComponent
+  },
+  {
+    path: 'main/responder',
+    component: ResponderComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'gerenciamento',
+    component: PrincipalComponent
+  }
 ];
