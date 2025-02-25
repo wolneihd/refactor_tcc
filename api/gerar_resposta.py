@@ -14,8 +14,9 @@ def gerar_resposta_ia(dados: dict):
         
         Lista de mensagens: {str(mensagens)}
 
-        Contexto adicional do usuário: {dados.get('texto_adicional')}
-        O contexto adicional pode vir vazio. Mesmo assim gerar uma resposta.
+        Contexto adicional do usuário: '''{dados.get('texto_adicional')}'''
+        Caso o contexto adicional venha vazio, gerar uma resposta apenas considerando o contexto já dado.
+        Você deve inserir obrigatoriamente o contexto adicional.
 
         O seu retorno deve ser apenas a mensagem para o cliente.
         Remover as quebras de linha antes do inicio do texto.
