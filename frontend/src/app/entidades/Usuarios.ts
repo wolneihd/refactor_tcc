@@ -10,6 +10,7 @@ export interface Mensagem {
   tipo_mensagem: string;
   usuario_id: number;
   checkbox: boolean;
+  respondido: number;
 }
 
 // usuario

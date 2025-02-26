@@ -54,12 +54,18 @@ export class ResponderComponent {
     this.api.gerarRespostaIA(this.promptAdicionalUsuario, this.mensagensSelecionadas).subscribe({
       next: (resposta) => {
         this.respostaIA = resposta;
+        this.limparQuebrasLinha(this.respostaIA.resposta);
+        console.log(this.respostaIA)
       },
       error: erro => {
         console.error(erro)
         alert("Erro ao carregar os jogos");
       }
     })
+  }
+
+  limparQuebrasLinha(texto: string) {
+    this.respostaIA.resposta = texto.replace(/\n{3,}/g, '');
   }
 
   retornoEnvio: string = '';

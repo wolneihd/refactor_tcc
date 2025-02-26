@@ -1,6 +1,7 @@
 <div class="container">
   <div class="box">
-    <input type="text" placeholder="Digite o nome">
+    <!-- <label for="texto-busca">Nome do Usuário</label> -->
+    <input type="text" id="texto-busca" placeholder="Digite o nome">
   </div>
   <div class="box">
 
@@ -19,28 +20,28 @@
 
   <div class="box">
     <select id="tipo" name="Tipo">
-      <option value="">Todas</option>
-      <option value="">Texto</option>
-      <option value="">Áudio</option>
-      <option value="">Imagem</option>
+      <option value="Todas">Todas</option>
+      <option value="Texto">Texto</option>
+      <option value="Áudio">Áudio</option>
+      <option value="Imagem">Imagem</option>
     </select>
 
     <select id="ia" name="IA">
-      <option value="">GroqIA</option>
-      <option value="">ChatGPT</option>
-      <option value="">Gemini</option>
+      <option value="GroqIA">GroqIA</option>
+      <option value="ChatGPT">ChatGPT</option>
+      <option value="Gemini">Gemini</option>
       <!-- <option value="">Imagem</option> -->
     </select>
   </div>
 
   <div class="box">
-    <input type="date" id="data" name="data">
-    <input type="date" id="data" name="data">
+    <input type="date" id="data-de" name="data">
+    <input type="date" id="data-ate" name="data">
   </div>
 
   <div class="box">
     <button class="btn btn-light">Cancelar</button>
-    <button class="btn btn-dark">Filtrar</button>
+    <button class="btn btn-dark" (click)="captarDadosBusca()">Filtrar</button>
   </div>
 
 </div>

@@ -42,6 +42,7 @@
         <th>Análise IA</th>
         <th>Categoria</th>
         <th>Resumo</th>
+        <th>Status</th>
         <th>Visualizar</th>
         <th>Selecionar</th>
       </tr>
@@ -50,10 +51,11 @@
         <td>{{mensagem.llm}}</td>
         <td>{{converterTimestampData(mensagem.timestamp)}}</td>
         <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
-        <td>{{mensagem.tipo_mensagem}}</td>
-        <td>{{mensagem.analise_ia}}</td>
-        <td>{{mensagem.categoria}}</td>
+        <td>{{informarTipo(mensagem.tipo_mensagem)}}</td>
+        <td>{{mensagem.analise_ia.toLocaleLowerCase()}}</td>
+        <td>{{mensagem.categoria.toLocaleLowerCase()}}</td>
         <td>{{mensagem.feedback}}</td>
+        <td>{{informarStatus(mensagem.respondido)}}</td>
         <td class="td-center-edit">
           <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button>
         </td>

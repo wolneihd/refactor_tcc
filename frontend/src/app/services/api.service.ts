@@ -4,6 +4,7 @@ import { Mensagem, Usuario } from '../entidades/Usuarios';
 import { Observable } from 'rxjs';
 import { enviroment } from '../environment/environment';
 import { Resposta } from '../entidades/Resposta';
+import { Busca } from '../entidades/Busca';
 
 const apiUrl = enviroment.apiUrl;
 
@@ -34,5 +35,9 @@ export class ApiService {
       "resposta": resposta
     }
     return this.httpClient.post<any>(`${apiUrl}/responder`, dados)
+  }
+
+  filtrarBusca(busca: Busca): Observable<Busca>{
+    return this.httpClient.post<Busca>(`${apiUrl}/filtrar`, busca);
   }
 }

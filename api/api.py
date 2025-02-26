@@ -23,6 +23,13 @@ def montar_API():
         data = select_all_mensagens()  
         return jsonify(data)  
     
+    # obter todas as mensagens:
+    @app.route('/filtrar', methods=['POST'])
+    def filtrar_mensagens():
+        dados = request.get_json()
+        print(dados, flush=True)
+        return jsonify({"retorno":"com sucesso no backend!"})  
+
     # gerar sugestão resposta com IA:
     @app.route('/gerar_resposta', methods=['POST'])
     def gerar_resposta():

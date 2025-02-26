@@ -25,7 +25,8 @@ class Message:
                 'analise_ia': mensagem['analise_ia'],
                 'categoria': mensagem['categoria'],
                 'feedback': mensagem['feedback'],
-                'llm': mensagem['llm']
+                'llm': mensagem['llm'],
+                'respondido': mensagem.get('respondido')
             }
             lista.append(dicionario)
         return lista

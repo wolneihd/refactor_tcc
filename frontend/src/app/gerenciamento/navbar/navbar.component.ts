@@ -29,4 +29,8 @@ export class NavbarComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  abrirConfigurar() {
+    window.location.href = 'http://localhost:4200/configurar';
+  }
 }

@@ -43,7 +43,8 @@ def select_all_mensagens():
                 llm.llm,
                 mensagens.analise_ia,
                 mensagens.categoria,
-                mensagens.feedback
+                mensagens.feedback,
+                mensagens.respondido
                 FROM mensagens
                 INNER JOIN llm ON llm.id = mensagens.llm_id;
         """)).mappings()
