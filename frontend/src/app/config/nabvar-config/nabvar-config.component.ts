@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { enviroment } from '../../environment/environment';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-nabvar-config',
@@ -9,9 +12,8 @@ import { Component } from '@angular/core';
 })
 export class NabvarConfigComponent {
 
-
   voltarGerenciamento() {
-    window.location.href = 'http://localhost:4200/gerenciamento';
+    window.location.href = `${frontEndUrl}/gerenciamento`;
   }
 
 }

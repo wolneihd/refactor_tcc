@@ -3,6 +3,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ContatoComponent } from '../contato/contato.component';
 import { ResetSenhaComponent } from '../reset-senha/reset-senha.component';
+import { enviroment } from '../../environment/environment';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-login',
@@ -32,6 +35,6 @@ export class LoginComponent {
   }
 
   abrirTelaPrincipal() {
-    window.location.href = 'http://localhost:4200/gerenciamento';
+    window.location.href = `${frontEndUrl}/gerenciamento`;
   }
 }

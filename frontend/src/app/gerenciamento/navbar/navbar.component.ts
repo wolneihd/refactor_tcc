@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { ShareService } from '../../services/share.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ContatoComponent } from '../../login/contato/contato.component';
+import { enviroment } from '../../environment/environment';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-navbar',
@@ -31,6 +34,6 @@ export class NavbarComponent {
   }
 
   abrirConfigurar() {
-    window.location.href = 'http://localhost:4200/configurar';
+    window.location.href = `${frontEndUrl}/configurar`;
   }
 }
