@@ -1,4 +1,6 @@
+import io
 import os
+import pprint
 import telebot
 from dotenv import load_dotenv
 import random
@@ -7,6 +9,7 @@ import string
 from entidades import User, Message
 from repository import salvar_nova_mensagem, select_config
 from audio_handler import convert_audio, transcribe_audio
+from salvar_minio import salvar_imagem_bucket
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -24,8 +27,46 @@ def handle_text(message):
     llm = select_config()
     usuario = User(message.from_user) 
     mensagem = Message(message, llm)
-    salvar_nova_mensagem(usuario, mensagem, mensagem.llm)
+    salvar_nova_mensagem(
+        usuario=usuario, 
+        mensagem=mensagem, 
+        llm_selected=mensagem.llm,
+        tipo_mensagem="texto"
+        )
     bot.send_message(message.chat.id, "mensagem recebida, estaremos analisando.")
+
+## Handler para mensagens tipo Imagem
+@bot.message_handler(content_types=['photo'])
+def handle_photo(message):
+    # Obtém o arquivo da imagem
+    file_info = bot.get_file(message.photo[-1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+
+    nome_arquivo, resposta = salvar_imagem_bucket(
+        downloaded_file=downloaded_file
+        )
+
+    try:
+        usuario = User(message.from_user) 
+        mensagem = Message(message, n_imagem=nome_arquivo)
+        salvar_nova_mensagem(
+            usuario=usuario,   
+            mensagem=mensagem,
+            tipo_mensagem="imagem",
+            )
+    except Exception as e:
+        print(e)
+    
+    bot.send_message(message.chat.id, resposta)
+
+def enviar_mensagem(user_id: int, resposta: str):
+    try:
+        bot.send_message(user_id, resposta)
+        print(f"resposta enviada para o user_id {user_id}: {resposta}")
+    except Exception as e:
+        print(f"Erro ao enviar resposta para o user_id {user_id}: {str(e)}")
+
+# ------------------ TODO -------------------------        
 
 ## Handler para mensagens em audio
 @bot.message_handler(content_types=['voice'])
@@ -53,33 +94,9 @@ def handle_voice(message):
     salvar_nova_mensagem(usuario, mensagem, mensagem.llm)
     bot.send_message(message.chat.id, "Mensagem de aúdio recebida, estaremos analisando.")
 
-## Handler para mensagens tipo Imagem
-@bot.message_handler(content_types=['photo'])
-def handle_photo(message):
-    # Obtém o arquivo da imagem
-    file_info = bot.get_file(message.photo[-1].file_id)
-    downloaded_file = bot.download_file(file_info.file_path)
-
-    caracteres = string.ascii_letters + string.digits
-    nome_arquivo = ''.join(random.choice(caracteres) for _ in range(15))
-
-    # Define o caminho para salvar a imagem
-    image_path = os.path.join('images', f'{nome_arquivo}.jpg')
-
-    # Salva a imagem na pasta 'images'
-    with open(image_path, 'wb') as new_file:
-        new_file.write(downloaded_file)
-
-    # save_message_DB(message)
-    bot.send_message(message.chat.id, "Imagem recebida, estaremos analisando.")
-
-def enviar_mensagem(user_id: int, resposta: str):
-    try:
-        bot.send_message(user_id, resposta)
-        print(f"resposta enviada para o user_id {user_id}: {resposta}")
-    except Exception as e:
-        print(f"Erro ao enviar resposta para o user_id {user_id}: {str(e)}")
-
 def iniciar_telebot():
     print("\nbot/aplicação inicializada...")
     bot.polling(none_stop=True)
+
+if __name__ == "__main__":
+    iniciar_telebot()

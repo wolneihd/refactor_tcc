@@ -13,18 +13,17 @@ services:
     image: mysql:5.7
     restart: always
     env_file:
-      - ./api/.env
+      - ./.env
     environment:
-      MYSQL_DATABASE: ${DATABASE}
-      # MYSQL_USER: ${USER}
-      MYSQL_PASSWORD: ${PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - '3307:3306'
     volumes:
       - my-db:/var/lib/mysql
     networks:
-      - backend_network  
+      - backend_network
 
   mensageria:
     build:
@@ -54,10 +53,29 @@ services:
     networks:
       - backend_network
 
+  minio:
+    image: bitnami/minio:latest  # ou a versão mais recente ou correta
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minionetwork
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_DEFAULT_BUCKETS=arquivos
+
 volumes:
-  my-db:  # Definindo o volume persistente 'my-db'
+  minio_data:
+    driver: local
+  my-db:
+    # Definindo o volume persistente 'my-db'
 
 networks:
   backend_network:
     driver: bridge
     name: backend_network
+  minionetwork:
+    driver: bridge

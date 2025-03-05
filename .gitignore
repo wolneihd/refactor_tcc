@@ -13,3 +13,6 @@
 /audio.wav
 
 /messageHandler/.env_old
+
+/minIO
+/.env

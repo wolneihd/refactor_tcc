@@ -57,7 +57,8 @@
         <td>{{mensagem.feedback}}</td>
         <td>{{informarStatus(mensagem.respondido)}}</td>
         <td class="td-center-edit">
-          <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button>
+          <!-- <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button> -->
+          <button class="btn btn-light" (click)="abrirDialogImagem(mensagem.nome_arquivo)">Ver</button>
         </td>
         <td>
           <input type="checkbox" (click)="checkSelecionado(mensagem)">

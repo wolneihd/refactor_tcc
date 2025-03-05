@@ -9,3 +9,4 @@ sqlalchemy
 pyTelegramBotAPI
 flask
 flask_cors
+minio

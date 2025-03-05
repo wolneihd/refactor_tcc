@@ -11,6 +11,7 @@ export interface Mensagem {
   usuario_id: number;
   checkbox: boolean;
   respondido: number;
+  nome_arquivo: string;
 }
 
 // usuario

@@ -65,7 +65,12 @@ def select_config():
         print(f"Error fetching configurations: {e}")
         return []    
 
-def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
+def salvar_nova_mensagem(
+        usuario: User, 
+        mensagem: Message, 
+        tipo_mensagem:str, 
+        llm_selected: str = None,
+        ):
     try:
         # Verificar se o usuário já existe no banco de dados
         usuario_bd = session.query(Usuario).filter_by(userID_Telegram=usuario.userID_Telegram).first()
@@ -81,21 +86,33 @@ def salvar_nova_mensagem(usuario: User, mensagem: Message, llm_selected: str):
             session.add(usuario_bd)
             session.commit()
 
-        # Criar nova mensagem associada ao usuário
-        nova_mensagem = Mensagem(
-            usuario_id=usuario_bd.id,
-            texto_msg=mensagem.texto_msg,
-            timestamp=mensagem.timestamp,
-            tipo_mensagem=mensagem.tipo_mensagem,
-            respondido=mensagem.respondido,
-            resposta=mensagem.resposta,
+        if (tipo_mensagem == "texto"):
 
-            # se IA não analisar corretamente, valor será NONE/NULL.
-            llm_id=id_llm,
-            analise_ia=mensagem.analiseIA,
-            categoria=mensagem.categoria,
-            feedback=mensagem.feedback,
-        )
+            # Criar nova mensagem associada ao usuário
+            nova_mensagem = Mensagem(
+                usuario_id=usuario_bd.id,
+                texto_msg=mensagem.texto_msg,
+                timestamp=mensagem.timestamp,
+                tipo_mensagem=mensagem.tipo_mensagem,
+                respondido=mensagem.respondido,
+                resposta=mensagem.resposta,
+
+                # se IA não analisar corretamente, valor será NONE/NULL.
+                llm_id=id_llm,
+                analise_ia=mensagem.analiseIA,
+                categoria=mensagem.categoria,
+                feedback=mensagem.feedback,
+            )
+
+        if (tipo_mensagem == "imagem"):
+
+            nova_mensagem = Mensagem(
+                usuario_id=usuario_bd.id,
+                timestamp=mensagem.timestamp,
+                tipo_mensagem=mensagem.tipo_mensagem,
+                respondido=mensagem.respondido,
+                nome_imagem=mensagem.nome_imagem
+            )
 
         # Adicionar e salvar a nova mensagem
         session.add(nova_mensagem)

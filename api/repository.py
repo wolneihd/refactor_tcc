@@ -31,23 +31,11 @@ def create_tables():
 def select_all_mensagens():
     with engine.connect() as connection:
         # objetos em mapping
-        usuarios = connection.execute(text("SELECT * FROM usuarios")).mappings()
+
+        usuarios = connection.execute(text("SELECT * FROM usuarios;")).mappings()
         usuarios = [row for row in usuarios]  # Cada linha já é um dicionário
-        mensagens = connection.execute(text("""
-            SELECT 
-                mensagens.id,
-                mensagens.usuario_id,
-                mensagens.texto_msg,
-                mensagens.timestamp,
-                mensagens.tipo_mensagem,
-                llm.llm,
-                mensagens.analise_ia,
-                mensagens.categoria,
-                mensagens.feedback,
-                mensagens.respondido
-                FROM mensagens
-                INNER JOIN llm ON llm.id = mensagens.llm_id;
-        """)).mappings()
+
+        mensagens = connection.execute(text("SELECT * FROM mensagens;")).mappings()
         mensagens = [row for row in mensagens]  # Cada linha já é um dicionário
 
         # objetos em dicionários:
@@ -59,7 +47,7 @@ def select_all_mensagens():
         # inserindo as mensagens por usuários:
         for usuario in users:
             for mensagem in messages:
-                if usuario['id'] == mensagem['usuario_id']:
+                if usuario.get('id') == mensagem.get('usuario_id'):
                     usuario['mensagens'].append(mensagem)
         return users
 

@@ -24,13 +24,16 @@ class Mensagem(Base):
 
     id = Column(Integer, primary_key=True)  # Chave primária
     usuario_id = Column(Integer, ForeignKey('usuarios.id'))  # Chave estrangeira
-    texto_msg = Column(String(255), nullable=False)
+    texto_msg = Column(Text, nullable=True)
     timestamp = Column(Integer, nullable=False)
     tipo_mensagem = Column(String(255), nullable=False)
     respondido = Column(Boolean, nullable=False)
 
+    # Coluna para o nome da imagem no BD / MINio:
+    nome_imagem = Column(String(255), nullable=True)
+
     # Colunas campos IA
-    llm_id = Column(Integer, ForeignKey('llm.id'))  # Chave estrangeira
+    llm_id = Column(Integer, ForeignKey('llm.id'), nullable=True)  # Chave estrangeira
     analise_ia = Column(String(255), nullable=True)
     categoria = Column(String(255), nullable=True)
     feedback = Column(String(255), nullable=True)

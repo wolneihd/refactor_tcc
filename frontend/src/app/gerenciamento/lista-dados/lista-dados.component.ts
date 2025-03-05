@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { Mensagem } from '../../entidades/Usuarios';
 import { FormsModule } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogImagemComponent } from '../dialog-imagem/dialog-imagem.component';
 
 @Component({
   selector: 'app-lista-dados',
@@ -92,4 +94,18 @@ export class ListaDadosComponent {
     const minutos = data.getMinutes().toString().padStart(2, '0');
     return `${horas}:${minutos}`;
   }
+
+  readonly dialog = inject(MatDialog);
+
+  abrirDialogImagem(nome_arquivo: string) {
+    const dialogRef = this.dialog.open(DialogImagemComponent, {
+      data: {
+        url: nome_arquivo
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }  
 }
