@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Busca } from '../../entidades/Busca';
 import { ApiService } from '../../services/api.service';
+import { ShareService } from '../../services/share.service';
 
 @Component({
   selector: 'app-filtrar',
@@ -11,7 +12,11 @@ import { ApiService } from '../../services/api.service';
 })
 export class FiltrarComponent {
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private share: ShareService) {}
+
+  fecharResponder() {
+    this.share.mostrarFiltrarResponder(false, false);
+  }
 
   captarDadosBusca() {
 
@@ -22,15 +27,17 @@ export class FiltrarComponent {
     let ia = ((<HTMLInputElement>document.getElementById("ia")).value);
     let dataDe = ((<HTMLInputElement>document.getElementById("data-de")).value);
     let dataAte = ((<HTMLInputElement>document.getElementById("data-ate")).value);
+    let analise_ia = ((<HTMLInputElement>document.getElementById("analise_ia")).value);
   
     let busca: Busca = {
       categoria: categoria,
       dataDe: dataDe,
       DataAte: dataAte,
       ia: ia,
-      nome: nome,
+      nome: nome.toLowerCase(),
       status: status,
-      tipo: tipo
+      tipo: tipo,
+      analise_ia: analise_ia
     };
 
     console.log("Realizar busca de:", busca);
@@ -43,6 +50,8 @@ export class FiltrarComponent {
         console.error(erro)
       }
     })
+
+    this.fecharResponder();
   }
 
 }

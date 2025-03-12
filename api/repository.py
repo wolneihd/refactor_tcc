@@ -80,5 +80,55 @@ def atualizar_resposta_bd(ids: list, resposta: str):
     finally:
         session.close()  # Fecha a sessão para evitar conexões abertas
 
+def select_filter(
+        analise_ia: str,
+        status: int,
+        tipo: str,
+        timestamp_data_de: int,
+        timestamp_data_ate: int,
+        nome_sobrenome: str,
+        categoria: str,
+        llm_selecionada: int
+        ):
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        cursor.execute(
+            """
+                SELECT 
+                    mensagens.id,
+                    mensagens.usuario_id,
+                    usuarios.nome,
+                    usuarios.sobrenome,
+                    mensagens.texto_msg,
+                    mensagens.timestamp,
+                    mensagens.tipo_mensagem,
+                    mensagens.respondido,
+                    mensagens.nome_imagem,
+                    mensagens.llm_id,
+                    mensagens.analise_ia,
+                    mensagens.categoria,
+                    mensagens.feedback,
+                    mensagens.resposta
+                FROM aplicacao.mensagens
+                JOIN usuarios ON mensagens.usuario_id = usuarios.id
+                WHERE 
+                    (
+                    mensagens.analise_ia LIKE CONCAT('%', %s, '%')
+                    AND mensagens.tipo_mensagem LIKE CONCAT('%', %s, '%')
+                    AND mensagens.respondido LIKE CONCAT('%', %s, '%')
+                    );
+            """
+            , (analise_ia, tipo, status))
+        
+        registros = cursor.fetchall()
+        print(registros, flush=True)
+
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
+
 if __name__ == "__main__":
     print(select_all_mensagens())

@@ -25,5 +25,13 @@ export const routes: Routes = [
   {
     path: 'configurar',
     component: ConfigComponent
+  },
+  {
+    path: '',
+    component: LoginComponent
+  },
+  {
+    path: '**',
+    component: LoginComponent
   }
 ];

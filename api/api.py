@@ -4,6 +4,7 @@ from repository import select_all_mensagens
 from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
+from busca_filtrada import filtrar_dados
 
 import os
 from dotenv import load_dotenv
@@ -27,7 +28,7 @@ def montar_API():
     @app.route('/filtrar', methods=['POST'])
     def filtrar_mensagens():
         dados = request.get_json()
-        print(dados, flush=True)
+        filtrar_dados(dados)
         return jsonify({"retorno":"com sucesso no backend!"})  
 
     # gerar sugestão resposta com IA:

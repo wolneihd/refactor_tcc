@@ -5,5 +5,6 @@ export interface Busca {
     ia: string,
     nome: string,
     status: string,
-    tipo: string
+    tipo: string,
+    analise_ia: string
 }

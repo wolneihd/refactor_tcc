@@ -16,13 +16,11 @@ const frontEndUrl = enviroment.frontEndUrl;
 export class NavbarComponent {
 
   readonly dialog = inject(MatDialog);
-  isFiltrarSelecionado: boolean = false;
 
   constructor(private shareService: ShareService) { }
 
-  responderMensagem() {
-    this.isFiltrarSelecionado = !this.isFiltrarSelecionado;
-    this.shareService.mostrarFiltrarResponder(this.isFiltrarSelecionado, false);
+  filtrarMensagem() {
+    this.shareService.mostrarFiltrarResponder(true, false);
   }
 
   abrirDialogContato() {

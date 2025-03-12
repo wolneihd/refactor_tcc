@@ -52,8 +52,8 @@
         <td>{{converterTimestampData(mensagem.timestamp)}}</td>
         <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
         <td>{{informarTipo(mensagem.tipo_mensagem)}}</td>
-        <td>{{mensagem.analise_ia.toLocaleLowerCase()}}</td>
-        <td>{{mensagem.categoria.toLocaleLowerCase()}}</td>
+        <td>{{mensagem.analise_ia?.toLocaleLowerCase()}}</td>
+        <td>{{mensagem.categoria?.toLocaleLowerCase()}}</td>
         <td>{{mensagem.feedback}}</td>
         <td>{{informarStatus(mensagem.respondido)}}</td>
         <td class="td-center-edit">
