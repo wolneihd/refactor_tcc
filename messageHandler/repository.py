@@ -114,6 +114,23 @@ def salvar_nova_mensagem(
                 nome_imagem=mensagem.nome_imagem
             )
 
+        if (tipo_mensagem == "audio"):
+
+            nova_mensagem = Mensagem(
+                usuario_id=usuario_bd.id,
+                timestamp=mensagem.timestamp,
+                tipo_mensagem=mensagem.tipo_mensagem,
+                respondido=mensagem.respondido,
+                nome_imagem=mensagem.nome_audio,
+                texto_msg=mensagem.texto_msg,
+
+                # se IA não analisar corretamente, valor será NONE/NULL.
+                llm_id=id_llm,
+                analise_ia=mensagem.analiseIA,
+                categoria=mensagem.categoria,
+                feedback=mensagem.feedback
+            )
+
         # Adicionar e salvar a nova mensagem
         session.add(nova_mensagem)
         session.commit()

@@ -16,15 +16,18 @@ export class DialogImagemComponent {
   nome_arquivo: string = '';
   url_imagem: string = '';
 
+  tipo: string = '';
+  texto_msg: string = '';
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.ngOnInit()
    }
 
   ngOnInit(): void {
-    debugger
     this.nome_arquivo = this.data.url;
     this.url_imagem = `${minio}/${this.nome_arquivo}`;    
-    console.log(this.url_imagem);
+    this.tipo = this.data.tipo;
+    this.texto_msg = this.data.texto;
   }
 
 }

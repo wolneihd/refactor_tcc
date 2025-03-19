@@ -53,7 +53,7 @@ export class ListaDadosComponent {
   informarTipo(tipo: string): String {
     if (tipo === "text") {
       return "Texto";
-    } else if (tipo === "audio") {
+    } else if (tipo === "voice") {
       return "Audio"
     } else {
       return "Imagem"
@@ -97,10 +97,12 @@ export class ListaDadosComponent {
 
   readonly dialog = inject(MatDialog);
 
-  abrirDialogImagem(nome_arquivo: string) {
+  abrirDialogImagem(nome_arquivo: string, tipo_mensagem: string, texto_msg: string) {
     const dialogRef = this.dialog.open(DialogImagemComponent, {
       data: {
-        url: nome_arquivo
+        url: nome_arquivo,
+        tipo: tipo_mensagem,
+        texto: texto_msg,
       }
     });
 

@@ -3,6 +3,13 @@ FROM python:3.9-slim
 # Atualiza o pip
 RUN apt-get update && pip install --upgrade pip
 
+# Instalar ffmpeg e dependências do sistema
+RUN apt-get update && \
+    apt-get install -y \
+    ffmpeg \
+    libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Define o diretório de trabalho
 WORKDIR /messageHandler
 

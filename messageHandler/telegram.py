@@ -64,9 +64,7 @@ def enviar_mensagem(user_id: int, resposta: str):
         bot.send_message(user_id, resposta)
         print(f"resposta enviada para o user_id {user_id}: {resposta}")
     except Exception as e:
-        print(f"Erro ao enviar resposta para o user_id {user_id}: {str(e)}")
-
-# ------------------ TODO -------------------------        
+        print(f"Erro ao enviar resposta para o user_id {user_id}: {str(e)}")      
 
 ## Handler para mensagens em audio
 @bot.message_handler(content_types=['voice'])
@@ -87,11 +85,23 @@ def handle_voice(message):
     # Transcreve o áudio
     transcription = transcribe_audio(wav_file_path)
 
+    print(f'transcricao: {transcription}', flush=True)
+
     # Salva informação no banco de dados
     llm = select_config()
     usuario = User(message.from_user) 
-    mensagem = Message(message, llm, transcription)
-    salvar_nova_mensagem(usuario, mensagem, mensagem.llm)
+    mensagem = Message(
+        data=message,
+        transcription=transcription,
+        n_audio="teste.wav",
+        llm=llm
+    )
+    salvar_nova_mensagem(
+        usuario=usuario,
+        mensagem=mensagem,
+        tipo_mensagem="audio",
+        llm_selected=llm
+    )
     bot.send_message(message.chat.id, "Mensagem de aúdio recebida, estaremos analisando.")
 
 def iniciar_telebot():

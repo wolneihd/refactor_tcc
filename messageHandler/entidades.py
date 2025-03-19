@@ -14,7 +14,7 @@ class User:
         print(f"mensagem do usuário: \nid: {self.userID_Telegram} \nNome: {self.nome} \nSobrenome: {self.sobrenome}")
 
 class Message:
-    def __init__(self, data: dict, llm: str = None, transcription: str = None, n_imagem: str = None):
+    def __init__(self, data: dict, llm: str = None, transcription: str = None, n_imagem: str = None, n_audio: str = None):
 
         if (data.content_type) == "text":
 
@@ -24,7 +24,6 @@ class Message:
             self.tipo_mensagem = data.content_type
             self.respondido = False
             self.texto_msg = data.json['text']
-            self.imprimir_dados_nova_mensagem()
             self.analise_ia(llm=llm)
 
         elif (data.content_type) == "photo":
@@ -35,15 +34,34 @@ class Message:
             self.tipo_mensagem = data.content_type
             self.respondido = False
             self.nome_imagem = n_imagem
-            self.imprimir_dados_nova_mensagem() 
 
-    def imprimir_dados_nova_mensagem(self):
-        print(f"""mensagem do usuário: 
-              \n id_user: {self.id_user} 
-              \n timestamp: {self.timestamp} 
-              \n tipo_mensagem: {self.tipo_mensagem}
-              \n respondido: {self.respondido}
-        """)
+        elif (data.content_type) == "voice":
+
+            print("Mensagem de Audio recebida:", flush=True)
+            self.id_user = data.from_user.id
+            self.timestamp = data.date
+            self.tipo_mensagem = data.content_type
+            self.respondido = False
+            self.nome_audio = n_audio
+            self.texto_msg = transcription
+            self.analiseIA = None
+            self.categoria = None
+            self.feedback = None
+            self.analise_ia(llm)  
+            self.__imprimir_msg_audio()  
+
+    def __imprimir_msg_audio(self):
+        print(f"""
+            id_user = {self.id_user}
+            timestamp = {self.timestamp}
+            tipo_mensagem = {self.tipo_mensagem}
+            respondido = {self.respondido}
+            nome_audio = {self.nome_audio}
+            transcricao = {self.texto_msg}
+            analiseIA = {self.analiseIA}
+            categoria = {self.categoria}
+            feedback = {self.feedback}
+            """, flush=True)       
 
     def analise_ia(self, llm: str):
 
