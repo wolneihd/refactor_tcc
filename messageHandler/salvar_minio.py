@@ -41,3 +41,31 @@ def salvar_imagem_bucket(downloaded_file):
         return f"{nome_arquivo}.jpg", f"Imagem recebida, estaremos analisando."
     except Exception as e:
         return f"{nome_arquivo}.jpg", f"Erro ao enviar a imagem para o Minio: {e}"
+    
+def salvar_audio_bucket(downloaded_file):
+
+    caracteres = string.ascii_letters + string.digits
+    nome_arquivo = ''.join(random.choice(caracteres) for _ in range(15))
+
+    # Enviar a imagem diretamente para o Minio
+    try:
+
+        from minio import Minio
+        load_dotenv()
+        
+        MINIO_CLIENT = Minio("host.docker.internal:9000", access_key=ACCESS_KEY, secret_key=SECRET_KEY, secure=False)
+
+        # Envia o arquivo para o Minio diretamente da memória sem salvar localmente
+        file_stream = io.BytesIO(downloaded_file)
+
+        MINIO_CLIENT.put_object(
+            bucket_name="audios",
+            object_name=f"{nome_arquivo}.wav",
+            data=file_stream,
+            length=len(downloaded_file)
+            )
+  
+        # Resposta do bot
+        print(f"{nome_arquivo}.wav salvo com sucesso no MinIO!", flush=True)
+    except Exception as e:
+        print(f"Erro ao salvar no MinIO: {e}", flush=True)

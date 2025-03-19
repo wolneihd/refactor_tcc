@@ -8,8 +8,8 @@ import string
 
 from entidades import User, Message
 from repository import salvar_nova_mensagem, select_config
-from audio_handler import convert_audio, transcribe_audio
-from salvar_minio import salvar_imagem_bucket
+from audio_handler import convert_audio, transcribe_audio, convert_audio_memoria, transcribe_audio_memoria
+from salvar_minio import salvar_imagem_bucket, salvar_audio_bucket
 
 # Carregar variáveis de ambiente
 load_dotenv()
@@ -73,19 +73,13 @@ def handle_voice(message):
     file_info = bot.get_file(message.voice.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
 
-    # Salva o arquivo OGG
-    ogg_file_path = 'audio.ogg'
-    with open(ogg_file_path, 'wb') as new_file:
-        new_file.write(downloaded_file)
+    # atualizado para salvar audio em memória para economizar armazenamento.
+    ogg_file = io.BytesIO(downloaded_file)
+    wav_file = convert_audio_memoria(ogg_file)
+    transcription = transcribe_audio_memoria(wav_file)
 
-    # Converte OGG para WAV
-    wav_file_path = 'audio.wav'
-    convert_audio(ogg_file_path, wav_file_path)
-
-    # Transcreve o áudio
-    transcription = transcribe_audio(wav_file_path)
-
-    print(f'transcricao: {transcription}', flush=True)
+    # salvando arquivo no MinIO:
+    salvar_audio_bucket(downloaded_file)
 
     # Salva informação no banco de dados
     llm = select_config()
