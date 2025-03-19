@@ -8,7 +8,8 @@
     <h6>Entre com informações adicionais para a IA</h6>
     <textarea name="complemento" id="complemento" placeholder="Digite aqui seu contexto adicional" [(ngModel)]="promptAdicionalUsuario"></textarea>
     <div class="box-buttom">
-      <button class="btn btn-light" (click)="gerarResposta()">Gerar</button>
+      <button class="btn btn-light" (click)="fecharResposta()">Cancelar</button>
+      <button class="btn btn-dark" (click)="gerarResposta()">Gerar</button>
     </div>
   </div>
   <div class="box">

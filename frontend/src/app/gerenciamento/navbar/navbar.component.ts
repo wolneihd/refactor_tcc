@@ -34,4 +34,8 @@ export class NavbarComponent {
   abrirConfigurar() {
     window.location.href = `${frontEndUrl}/configurar`;
   }
+
+  abrirDashboardTotem() {
+    window.location.href = `${frontEndUrl}/totem`;
+  }
 }

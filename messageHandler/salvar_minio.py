@@ -67,5 +67,7 @@ def salvar_audio_bucket(downloaded_file):
   
         # Resposta do bot
         print(f"{nome_arquivo}.wav salvo com sucesso no MinIO!", flush=True)
+        return f"{nome_arquivo}.wav"
     except Exception as e:
         print(f"Erro ao salvar no MinIO: {e}", flush=True)
+        return None

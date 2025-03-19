@@ -79,7 +79,7 @@ def handle_voice(message):
     transcription = transcribe_audio_memoria(wav_file)
 
     # salvando arquivo no MinIO:
-    salvar_audio_bucket(downloaded_file)
+    n_arquivo = salvar_audio_bucket(downloaded_file)
 
     # Salva informação no banco de dados
     llm = select_config()
@@ -87,7 +87,7 @@ def handle_voice(message):
     mensagem = Message(
         data=message,
         transcription=transcription,
-        n_audio="teste.wav",
+        n_audio=n_arquivo,
         llm=llm
     )
     salvar_nova_mensagem(
