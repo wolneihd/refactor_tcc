@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from repository import select_all_mensagens
-from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd
+from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd, buscar_mensagens_totem
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
@@ -53,7 +53,13 @@ def montar_API():
         # Obter dados do corpo da requisição
         dados = request.get_json()
         retorno = insert_feedback_totem(status_totem=dados.get('status'))
-        return jsonify({'retorno': retorno})  
+        return jsonify({'retorno': retorno})
+
+    # obter todas as mensagens:
+    @app.route('/totem', methods=['GET'])
+    def quantidades_totem():
+        data = buscar_mensagens_totem()
+        return jsonify(data)    
 
     app.run(port=PORT,host=HOST,debug=True)
 

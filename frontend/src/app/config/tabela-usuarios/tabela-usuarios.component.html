@@ -1,1 +1,24 @@
-<p>tabela-usuarios works!</p>
+<div class="box-tabela-usuarios">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Status</th>
+        <th>Ação</th>
+        <th>Excluir</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let linha of tabela">
+        <td *ngFor="let celula of linha">{{ celula }}</td>
+        <td>
+          <button class="btn btn-secondary" (click)="editarUsuario()">Editar</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="excluirUsuario()">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

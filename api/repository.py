@@ -130,5 +130,32 @@ def select_filter(
     finally:
         conexao.close()
 
+def buscar_mensagens_totem():
+
+    data = []
+
+    for opcao in ['positivo', 'neutro', 'negativo']: 
+        try:
+            conexao = conectar_database()
+            cursor = conexao.cursor()
+            cursor.execute('SELECT COUNT(*) FROM totem where status=%s;', (opcao,))        
+            resposta = cursor.fetchone()
+            # print(resposta, flush=True)
+
+            data.append({
+                "name": opcao,
+                "value": resposta[0]
+            })
+        except Exception as error:
+            print(f'Erro ao buscar filtrado: {error}', flush=True)
+            data.append({
+                "name": opcao,
+                "value": None
+            })
+        finally:
+            conexao.close()
+
+    return data
+
 if __name__ == "__main__":
     print(select_all_mensagens())

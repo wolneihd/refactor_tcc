@@ -38,3 +38,11 @@
 .label {
     margin-top: 10px;
 }
+
+.box-filtrar {
+    border-bottom: 1px solid black;
+}
+
+.box-dashboard {
+    margin: 5%;
+}
