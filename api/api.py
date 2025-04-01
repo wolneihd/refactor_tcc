@@ -5,6 +5,7 @@ from repository import create_tables, insert_feedback_totem, atualizar_resposta_
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
+from service_usuarios import service_buscar_usuarios
 
 import os
 from dotenv import load_dotenv
@@ -59,7 +60,13 @@ def montar_API():
     @app.route('/totem', methods=['GET'])
     def quantidades_totem():
         data = buscar_mensagens_totem()
-        return jsonify(data)    
+        return jsonify(data)
+
+    # obter todas os usuarios:
+    @app.route('/usuarios', methods=['GET'])
+    def obter_todos_usuarios():
+        data = service_buscar_usuarios()
+        return jsonify(data) 
 
     app.run(port=PORT,host=HOST,debug=True)
 

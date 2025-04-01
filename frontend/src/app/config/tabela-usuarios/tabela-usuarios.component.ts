@@ -1,30 +1,58 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ApiService } from '../../services/api.service';
+import { User } from '../../entidades/User';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { UserConfigComponent } from '../user-config/user-config.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tabela-usuarios',
   standalone: true,
-  imports: [NgFor],
+  imports: [MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './tabela-usuarios.component.html',
   styleUrl: './tabela-usuarios.component.css'
 })
 export class TabelaUsuariosComponent {
 
-  // Array para armazenar os dados da tabela
-  tabela = [
-    ['João', 'joao@gmail.com', 'ativo'],
-    ['Pedro', 'pedro@gmail.com', 'ativo'],
-    ['Maria', 'maria@gmail.com', 'ativo'],
-    ['Antônio', 'antonio@gmail.com', 'ativo'],
-    ['Sérgio', 'sergio@gmail.com', 'ativo']
-  ];
+  readonly dialog = inject(MatDialog);
 
-  editarUsuario() {
-    alert('todo: editar usuario')
+  constructor(private api: ApiService) { }
+
+  usuarios: User[] = [];
+
+  ngOnInit() {
+    this.api.obterTodosUsuarios().subscribe({
+      next: res => {
+        this.usuarios = res;
+        console.log(this.usuarios);
+      },
+      error: erro => {
+        console.error(erro)
+      }
+    })
   }
 
-  excluirUsuario() {
-    alert('todo: excluir usuario')
+  editarUsuario(nome: string, email: string) {
+    const dialogRef = this.dialog.open(UserConfigComponent, {
+      data: {
+        titulo: "Editar usuário",
+        nome: nome,
+        email: email
+      }
+    });
+  }
+
+  excluirUsuario(nome: string) {
+    alert('todo: excluir usuario: ' + nome)
+  }
+
+  novoUsuario() {
+    const dialogRef = this.dialog.open(UserConfigComponent, {
+      data: {
+        titulo: "Digite os dados do novo usuário",
+      }
+    });
   }
 
 }

@@ -10,15 +10,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let linha of tabela">
-        <td *ngFor="let celula of linha">{{ celula }}</td>
-        <td>
-          <button class="btn btn-secondary" (click)="editarUsuario()">Editar</button>
-        </td>
-        <td>
-          <button class="btn btn-danger" (click)="excluirUsuario()">Excluir</button>
-        </td>
-      </tr>
+      @for (usuario of usuarios; track $index) {
+        <tr>
+          <td>{{usuario.nome}}</td>
+          <td>{{usuario.email}}</td>
+          @if (usuario.status == true) {
+            <td>Ativo</td>
+          } @else {
+            <td>Inativo</td>
+          }
+          <td>
+            <button class="btn btn-secondary" (click)="editarUsuario(usuario.nome, usuario.email)">Editar</button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="excluirUsuario(usuario.nome)">Excluir</button>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
+
+  <div class="box-add-usuario">
+    <button class="btn btn-dark" (click)="novoUsuario()">Incluir Usuário</button>
+  </div>
 </div>

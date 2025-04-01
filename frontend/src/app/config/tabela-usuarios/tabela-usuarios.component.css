@@ -1,5 +1,6 @@
 .box-tabela-usuarios {
     margin: 5%;
+    display: flex;
 }
 
 th,
@@ -28,4 +29,8 @@ td+td,
 th+th {
     padding-left: 10px;
     /* Adiciona espaçamento apenas entre as colunas */
+}
+
+.box-add-usuario {
+    margin-left: 5px;
 }

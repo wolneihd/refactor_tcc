@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { enviroment } from '../environment/environment';
 import { Resposta } from '../entidades/Resposta';
 import { Busca } from '../entidades/Busca';
+import { User } from '../entidades/User';
 
 const apiUrl = enviroment.apiUrl;
 
@@ -43,5 +44,9 @@ export class ApiService {
 
   obterDadosTotem(): Observable<any[]> {
     return this.httpClient.get<any[]>(`${apiUrl}/totem`)
+  }
+
+  obterTodosUsuarios(): Observable<User[]> {
+    return this.httpClient.get<User[]>(`${apiUrl}/usuarios`)
   }
 }
