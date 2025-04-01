@@ -31,22 +31,11 @@ def create_tables():
 def select_all_mensagens():
     with engine.connect() as connection:
         # objetos em mapping
-        usuarios = connection.execute(text("SELECT * FROM usuarios")).mappings()
+
+        usuarios = connection.execute(text("SELECT * FROM usuarios;")).mappings()
         usuarios = [row for row in usuarios]  # Cada linha já é um dicionário
-        mensagens = connection.execute(text("""
-            SELECT 
-                mensagens.id,
-                mensagens.usuario_id,
-                mensagens.texto_msg,
-                mensagens.timestamp,
-                mensagens.tipo_mensagem,
-                llm.llm,
-                mensagens.analise_ia,
-                mensagens.categoria,
-                mensagens.feedback
-                FROM mensagens
-                INNER JOIN llm ON llm.id = mensagens.llm_id;
-        """)).mappings()
+
+        mensagens = connection.execute(text("SELECT * FROM mensagens;")).mappings()
         mensagens = [row for row in mensagens]  # Cada linha já é um dicionário
 
         # objetos em dicionários:
@@ -58,7 +47,7 @@ def select_all_mensagens():
         # inserindo as mensagens por usuários:
         for usuario in users:
             for mensagem in messages:
-                if usuario['id'] == mensagem['usuario_id']:
+                if usuario.get('id') == mensagem.get('usuario_id'):
                     usuario['mensagens'].append(mensagem)
         return users
 
@@ -90,6 +79,83 @@ def atualizar_resposta_bd(ids: list, resposta: str):
         print('Erro ao atualizar BD: ', error)
     finally:
         session.close()  # Fecha a sessão para evitar conexões abertas
+
+def select_filter(
+        analise_ia: str,
+        status: int,
+        tipo: str,
+        timestamp_data_de: int,
+        timestamp_data_ate: int,
+        nome_sobrenome: str,
+        categoria: str,
+        llm_selecionada: int
+        ):
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        cursor.execute(
+            """
+                SELECT 
+                    mensagens.id,
+                    mensagens.usuario_id,
+                    usuarios.nome,
+                    usuarios.sobrenome,
+                    mensagens.texto_msg,
+                    mensagens.timestamp,
+                    mensagens.tipo_mensagem,
+                    mensagens.respondido,
+                    mensagens.nome_imagem,
+                    mensagens.llm_id,
+                    mensagens.analise_ia,
+                    mensagens.categoria,
+                    mensagens.feedback,
+                    mensagens.resposta
+                FROM aplicacao.mensagens
+                JOIN usuarios ON mensagens.usuario_id = usuarios.id
+                WHERE 
+                    (
+                    mensagens.analise_ia LIKE CONCAT('%', %s, '%')
+                    AND mensagens.tipo_mensagem LIKE CONCAT('%', %s, '%')
+                    AND mensagens.respondido LIKE CONCAT('%', %s, '%')
+                    );
+            """
+            , (analise_ia, tipo, status))
+        
+        registros = cursor.fetchall()
+        print(registros, flush=True)
+
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
+
+def buscar_mensagens_totem():
+
+    data = []
+
+    for opcao in ['positivo', 'neutro', 'negativo']: 
+        try:
+            conexao = conectar_database()
+            cursor = conexao.cursor()
+            cursor.execute('SELECT COUNT(*) FROM totem where status=%s;', (opcao,))        
+            resposta = cursor.fetchone()
+            # print(resposta, flush=True)
+
+            data.append({
+                "name": opcao,
+                "value": resposta[0]
+            })
+        except Exception as error:
+            print(f'Erro ao buscar filtrado: {error}', flush=True)
+            data.append({
+                "name": opcao,
+                "value": None
+            })
+        finally:
+            conexao.close()
+
+    return data
 
 if __name__ == "__main__":
     print(select_all_mensagens())

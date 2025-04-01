@@ -42,6 +42,7 @@
         <th>Análise IA</th>
         <th>Categoria</th>
         <th>Resumo</th>
+        <th>Status</th>
         <th>Visualizar</th>
         <th>Selecionar</th>
       </tr>
@@ -50,12 +51,14 @@
         <td>{{mensagem.llm}}</td>
         <td>{{converterTimestampData(mensagem.timestamp)}}</td>
         <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
-        <td>{{mensagem.tipo_mensagem}}</td>
-        <td>{{mensagem.analise_ia}}</td>
-        <td>{{mensagem.categoria}}</td>
+        <td>{{informarTipo(mensagem.tipo_mensagem)}}</td>
+        <td>{{mensagem.analise_ia | lowercase}}</td>
+        <td>{{mensagem.categoria | lowercase}}</td>
         <td>{{mensagem.feedback}}</td>
+        <td>{{informarStatus(mensagem.respondido)}}</td>
         <td class="td-center-edit">
-          <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button>
+          <!-- <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button> -->
+          <button class="btn btn-light" (click)="abrirDialogImagem(mensagem.nome_arquivo, mensagem.tipo_mensagem, mensagem.texto_msg)">Ver</button>
         </td>
         <td>
           <input type="checkbox" (click)="checkSelecionado(mensagem)">

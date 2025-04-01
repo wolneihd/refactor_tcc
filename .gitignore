@@ -9,7 +9,10 @@
 
 /venv
 
-/audio.ogg
-/audio.wav
+/messageHandler/audio.ogg
+/messageHandler/audio.wav
 
 /messageHandler/.env_old
+
+/minIO
+/.env

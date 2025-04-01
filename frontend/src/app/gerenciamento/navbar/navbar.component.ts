@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { ShareService } from '../../services/share.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ContatoComponent } from '../../login/contato/contato.component';
+import { enviroment } from '../../environment/environment';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-navbar',
@@ -13,13 +16,11 @@ import { ContatoComponent } from '../../login/contato/contato.component';
 export class NavbarComponent {
 
   readonly dialog = inject(MatDialog);
-  isFiltrarSelecionado: boolean = false;
 
   constructor(private shareService: ShareService) { }
 
-  responderMensagem() {
-    this.isFiltrarSelecionado = !this.isFiltrarSelecionado;
-    this.shareService.mostrarFiltrarResponder(this.isFiltrarSelecionado, false);
+  filtrarMensagem() {
+    this.shareService.mostrarFiltrarResponder(true, false);
   }
 
   abrirDialogContato() {
@@ -28,5 +29,13 @@ export class NavbarComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  abrirConfigurar() {
+    window.location.href = `${frontEndUrl}/configurar`;
+  }
+
+  abrirDashboardTotem() {
+    window.location.href = `${frontEndUrl}/totem`;
   }
 }

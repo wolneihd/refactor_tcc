@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { Mensagem } from '../../entidades/Usuarios';
 import { FormsModule } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogImagemComponent } from '../dialog-imagem/dialog-imagem.component';
 
 @Component({
   selector: 'app-lista-dados',
@@ -24,30 +26,38 @@ export class ListaDadosComponent {
   usuarioSelecionado: number = -1;
 
   constructor(
-    private httpClient: HttpClient,
     private share: ShareService,
     private api: ApiService
   ) { }
 
   ngOnInit(){
     this.api.obterDadosTabela().subscribe({
-      next: res => this.usuarios = res,
+      next: res => {
+        this.usuarios = res; 
+        // console.log(this.usuarios);
+      },
       error: erro => {
         console.error(erro)
       }
     })
   }
 
-  buscarDados() {
-    this.httpClient.get<Usuario[]>(`http://127.0.0.1:5000/`).subscribe(
-      res => {
-        this.usuarios = res;
-        // console.log(this.usuarios);
-      },
-      error => {
-        console.error('Erro ao buscar dados:', error);
-      }
-    );
+  informarStatus(codigo: number): String {
+    if (codigo === 0) {
+      return "Em aberto";
+    } else {
+      return "Respondido"
+    }
+  }
+
+  informarTipo(tipo: string): String {
+    if (tipo === "text") {
+      return "Texto";
+    } else if (tipo === "voice") {
+      return "Audio"
+    } else {
+      return "Imagem"
+    }
   }
 
   checkSelecionado(mensagem:Mensagem) {
@@ -58,7 +68,6 @@ export class ListaDadosComponent {
     this.mensagens = mensagens;
     this.btnResponder = true;
     this.usuarioSelecionado = id
-
   }
 
   responderMensagem(usuarios: Usuario[]) {
@@ -85,4 +94,20 @@ export class ListaDadosComponent {
     const minutos = data.getMinutes().toString().padStart(2, '0');
     return `${horas}:${minutos}`;
   }
+
+  readonly dialog = inject(MatDialog);
+
+  abrirDialogImagem(nome_arquivo: string, tipo_mensagem: string, texto_msg: string) {
+    const dialogRef = this.dialog.open(DialogImagemComponent, {
+      data: {
+        url: nome_arquivo,
+        tipo: tipo_mensagem,
+        texto: texto_msg,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }  
 }

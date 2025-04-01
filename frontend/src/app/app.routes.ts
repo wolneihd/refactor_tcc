@@ -3,6 +3,8 @@ import { ListaDadosComponent } from './gerenciamento/lista-dados/lista-dados.com
 import { ResponderComponent } from './gerenciamento/responder/responder.component';
 import { LoginComponent } from './login/login/login.component';
 import { PrincipalComponent } from './gerenciamento/principal/principal.component';
+import { ConfigComponent } from './config/config/config.component';
+import { DashboardComponent } from './totem/dashboard/dashboard.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +22,21 @@ export const routes: Routes = [
   {
     path: 'gerenciamento',
     component: PrincipalComponent
+  },
+  {
+    path: 'configurar',
+    component: ConfigComponent
+  },
+  {
+    path: 'totem',
+    component: DashboardComponent
+  },
+  {
+    path: '',
+    component: LoginComponent
+  },
+  {
+    path: '**',
+    component: LoginComponent
   }
 ];

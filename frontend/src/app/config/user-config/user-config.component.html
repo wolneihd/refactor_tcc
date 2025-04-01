@@ -1,0 +1,13 @@
+<mat-dialog-content class="mat-typography box-contato">
+
+    <h6>{{titulo}}</h6>
+    <br>
+    <input type="text" class="form-control" placeholder="Nome" value="{{nome}}">
+    <br>
+    <input type="text" class="form-control" placeholder="E-mail" value="{{email}}">
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button class="btn btn-light" [mat-dialog-close]="true">Cancelar</button>
+    <button class="btn btn-dark" [mat-dialog-close]="true">Cadastrar</button>
+</mat-dialog-actions>

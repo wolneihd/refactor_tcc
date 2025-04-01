@@ -1,3 +1,5 @@
+from get_url_minio import get_url
+
 class User:
     def to_dict(usuarios):
         lista = []
@@ -17,16 +19,23 @@ class Message:
         lista = []
         for mensagem in mensagens:
             dicionario = {
-                'id': mensagem['id'],
-                'usuario_id': mensagem['usuario_id'],
-                'texto_msg': mensagem['texto_msg'],
-                'timestamp': mensagem['timestamp'],
-                'tipo_mensagem': mensagem['tipo_mensagem'],
-                'analise_ia': mensagem['analise_ia'],
-                'categoria': mensagem['categoria'],
-                'feedback': mensagem['feedback'],
-                'llm': mensagem['llm']
+                'id': mensagem.get('id'),
+                'usuario_id': mensagem.get('usuario_id'),
+                'texto_msg': mensagem.get('texto_msg'),
+                'timestamp': mensagem.get('timestamp'),
+                'tipo_mensagem': mensagem.get('tipo_mensagem'),
+                'analise_ia': mensagem.get('analise_ia'),
+                'categoria': mensagem.get('categoria'),
+                'feedback': mensagem.get('feedback'),
+                'llm': mensagem.get('llm'),
+                'respondido': mensagem.get('respondido'),
+                'nome_arquivo': mensagem.get('nome_imagem')
             }
+
+            # if dicionario.get('tipo_mensagem') == "photo":
+            #     dicionario['url'] = get_url(dicionario.get('nome_arquivo'))
+
             lista.append(dicionario)
+
         return lista
     
