@@ -27,7 +27,7 @@ Esta aplicação tem como objetivo categorizar e responder feedbacks de usuário
 ### Requisitos
 
 - Docker
-- Docker Compose
+- Variáveis de ambiente configuradas
 
 ### Passos para Execução
 
@@ -36,7 +36,16 @@ Esta aplicação tem como objetivo categorizar e responder feedbacks de usuário
    git clone https://github.com/wolneihd/refactor_tcc.git
    ```
 
-2. Para rodar a aplicação, execute o seguinte comando:
+2. Incluir as variáveis de ambiente em:
+   ```
+   /api                             # .env
+   /frontend/src/app/environment:   # environment.ts
+   /messageHandler:                 # .env
+   /totem:                          # config.h
+   / (raiz do projeto)              # .env
+   ```
+
+3. Para rodar a aplicação, execute o seguinte comando:
    ```bash
    docker-compose up --build
    ```
@@ -51,8 +60,9 @@ A estrutura do repositório está organizada da seguinte forma:
 
 ```
 /frontend                # Código do frontend em Angular
-/backend                 # Código do backend em Python
+/api                     # Código do backend em Python
 /totem                   # Código do totem de atendimento em C++ (ESP-32)
-/database                # Scripts de configuração do MySQL
-/docker                  # Arquivos Docker e Docker Compose
+/messageHandler          # Gerenciamento das mensagens recebeidas no Telegram (Python)
+/powerBI                 # (TODO) Power-BI para visualização dos dados gerais do BD.
+raiz do projeto          # Docker Compose
 ```
