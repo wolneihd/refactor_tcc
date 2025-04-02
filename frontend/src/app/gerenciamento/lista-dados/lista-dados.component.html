@@ -48,7 +48,17 @@
       </tr>
       <tr *ngFor="let mensagem of mensagens">
         <td>{{mensagem.id}}</td>
-        <td>{{mensagem.llm}}</td>
+
+        @if (mensagem.llm == 1) {
+          <td>GroqIA</td>
+        } @else if (mensagem.llm == 2) {
+          <td>ChatGPT</td>
+        } @else if (mensagem.llm == 3) {
+          <td>Gemini</td>
+        } @else {
+          <td></td>
+        }
+        
         <td>{{converterTimestampData(mensagem.timestamp)}}</td>
         <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
         <td>{{informarTipo(mensagem.tipo_mensagem)}}</td>

@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from repository import select_all_mensagens
+from repository import select_all_mensagens, buscar_todas_llms, atualizar_ia
 from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd, buscar_mensagens_totem
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
@@ -67,6 +67,23 @@ def montar_API():
     def obter_todos_usuarios():
         data = service_buscar_usuarios()
         return jsonify(data) 
+    
+    # obter todas as LLMS:
+    @app.route('/llm-disponivel', methods=['GET'])
+    def obter_todas_opcoes_llm():
+        data = buscar_todas_llms()
+        return jsonify(data)
+
+    # salvar IA alterada:
+    @app.route('/alterar-ia', methods=['POST'])
+    def salvar_ia():
+        dados = request.get_json()
+        atualizar_ia(dados.get('ia'))
+
+        print(dados.get('ia'), flush=True)
+        print(dados.get('chave'), flush=True)
+        print(dados.get('powerbi'), flush=True)
+        return jsonify({'retorno': "teste"}) 
 
     app.run(port=PORT,host=HOST,debug=True)
 

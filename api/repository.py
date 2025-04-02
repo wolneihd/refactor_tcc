@@ -157,5 +157,41 @@ def buscar_mensagens_totem():
 
     return data
 
+def buscar_todas_llms():
+
+    data = []
+
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+        cursor.execute('SELECT * FROM llm;')        
+        resposta = cursor.fetchall()
+        for valor in resposta: 
+            data.append({
+                "id": valor[0],
+                "ia": valor[1]
+            })
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
+
+    return data
+
+def atualizar_ia(llm: str):
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        cursor.execute('update configs set valor = %s where campo="llm";', (llm, ))
+        conexao.commit()
+
+        print(f'LLM atualizada com sucesso no BD para {llm}', flush=True)
+
+    except Exception as error:
+        print('Erro ao atualizar BD: ', error)
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
+
 if __name__ == "__main__":
     print(select_all_mensagens())

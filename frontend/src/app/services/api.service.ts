@@ -6,6 +6,7 @@ import { enviroment } from '../environment/environment';
 import { Resposta } from '../entidades/Resposta';
 import { Busca } from '../entidades/Busca';
 import { User } from '../entidades/User';
+import { LLM } from '../entidades/LLM';
 
 const apiUrl = enviroment.apiUrl;
 
@@ -48,5 +49,18 @@ export class ApiService {
 
   obterTodosUsuarios(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${apiUrl}/usuarios`)
+  }
+
+  obterTodosLLMs(): Observable<LLM[]> {
+    return this.httpClient.get<LLM[]>(`${apiUrl}/llm-disponivel`)
+  }
+
+  salvarInputsConfig(ia: string, chave: string, powerbi: string): Observable<any>{
+    const dados = {
+      "ia": ia,
+      "chave": chave,
+      "powerbi": powerbi 
+    }
+    return this.httpClient.post<any>(`${apiUrl}/alterar-ia`, dados);
   }
 }

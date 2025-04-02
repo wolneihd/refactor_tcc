@@ -4,26 +4,26 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-user-config',
+  selector: 'app-excluir-usuario',
   standalone: true,
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
-  templateUrl: './user-config.component.html',
-  styleUrl: './user-config.component.css'
+  templateUrl: './excluir-usuario.component.html',
+  styleUrl: './excluir-usuario.component.css'
 })
-export class UserConfigComponent {
+export class ExcluirUsuarioComponent {
 
-  titulo: string = '';
   nome: string = '';
-  email: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.ngOnInit()
   }
 
   ngOnInit(): void {
-    this.titulo = this.data.titulo;
     this.nome = this.data.nome;
-    this.email = this.data.email;
+  }
+
+  inativarUsuario() {
+    alert('TODO: inativar usuário: ' + this.nome)
   }
 
 }
