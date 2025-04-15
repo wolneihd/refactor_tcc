@@ -20,6 +20,7 @@ export class ListaDadosComponent {
 
   usuarios: Usuario[] = [];
   mensagens: Mensagem[] = [];
+  hasTrue: boolean = false;
 
   isResponderSelecionado: boolean = false;
   btnResponder: boolean = false;
@@ -30,10 +31,10 @@ export class ListaDadosComponent {
     private api: ApiService
   ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.api.obterDadosTabela().subscribe({
       next: res => {
-        this.usuarios = res; 
+        this.usuarios = res;
         // console.log(this.usuarios);
       },
       error: erro => {
@@ -60,7 +61,7 @@ export class ListaDadosComponent {
     }
   }
 
-  checkSelecionado(mensagem:Mensagem) {
+  checkSelecionado(mensagem: Mensagem) {
     mensagem.checkbox = !mensagem.checkbox;
   }
 
@@ -71,9 +72,21 @@ export class ListaDadosComponent {
   }
 
   responderMensagem(usuarios: Usuario[]) {
-    this.share.shareMensagem(usuarios, this.usuarioSelecionado);
-    this.isResponderSelecionado = !this.isResponderSelecionado;
-    this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado);
+    for (const usuario of usuarios) {
+      for (const msg of usuario.mensagens) {
+        if (msg.checkbox) {
+          this.share.shareMensagem(usuarios, this.usuarioSelecionado);
+          this.isResponderSelecionado = !this.isResponderSelecionado;
+          this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado);
+          this.hasTrue = true;
+          break;
+        }
+      }
+    }
+    if (this.hasTrue == false) {
+      alert('Nenhuma mensagem selecionada para responder. Alguma deve ser escolhida.')
+      this.hasTrue = true;
+    }    
   }
 
   verUmaMensagem(mensagem: Mensagem) {
@@ -109,5 +122,5 @@ export class ListaDadosComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
-  }  
+  }
 }

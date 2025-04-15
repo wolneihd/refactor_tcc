@@ -63,4 +63,12 @@ export class ApiService {
     }
     return this.httpClient.post<any>(`${apiUrl}/alterar-ia`, dados);
   }
+
+  salvarUsuario(nome: string, email: string): Observable<any>{
+    const dados = {
+      "nome": nome,
+      "email": email
+    }
+    return this.httpClient.post<any>(`${apiUrl}/salvar_usuario`, dados);
+  }
 }

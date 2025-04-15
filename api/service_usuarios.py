@@ -1,26 +1,9 @@
-def service_buscar_usuarios():
-    
-    data = [
-        {
-            "nome": "João",
-            "email": "joao@gmail.com",
-            "status": True
-        },
-        {
-            "nome": "Pedro",
-            "email": "pedro@gmail.com",
-            "status": True
-        },
-        {
-            "nome": "Maria",
-            "email": "maria@gmail.com",
-            "status": True
-        },
-        {
-            "nome": "Antônio",
-            "email": "antonio@gmail.com",
-            "status": True
-        },
-    ]
+from repository import salvar_novo_usuario, buscar_todos_usuarios
 
+def service_buscar_usuarios():
+    data = buscar_todos_usuarios()
     return data
+
+def service_salvar_usuario(nome: str, email: str):
+    response = salvar_novo_usuario(nome, email)
+    return response

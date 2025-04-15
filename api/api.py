@@ -5,7 +5,7 @@ from repository import create_tables, insert_feedback_totem, atualizar_resposta_
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
-from service_usuarios import service_buscar_usuarios
+from service_usuarios import service_buscar_usuarios, service_salvar_usuario
 
 import os
 from dotenv import load_dotenv
@@ -67,6 +67,15 @@ def montar_API():
     def obter_todos_usuarios():
         data = service_buscar_usuarios()
         return jsonify(data) 
+    
+    # salvar mensagem do totem de feedback:
+    @app.route('/salvar_usuario', methods=['POST'])
+    def salvar_usuario():
+        dados = request.get_json()
+        nome = dados.get('nome')
+        email = dados.get('email')
+        retorno = service_salvar_usuario(nome, email)
+        return jsonify({'retorno': retorno})
     
     # obter todas as LLMS:
     @app.route('/llm-disponivel', methods=['GET'])

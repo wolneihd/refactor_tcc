@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from entidades import User, Message
-from tables import Base, Totem
+from tables import Base, Totem, UsuariosSistema
 from database import conectar_database
 
 # Carregar variáveis de ambiente
@@ -192,6 +192,47 @@ def atualizar_ia(llm: str):
         print('Erro ao atualizar BD: ', error)
     finally:
         session.close()  # Fecha a sessão para evitar conexões abertas
+
+# Função corrigida para inserir um registro
+def salvar_novo_usuario(nome: str, email: str):
+    try:
+        novo_usuario = UsuariosSistema(
+            nome = nome,
+            email = email,
+            status = True
+        ) 
+        session.add(novo_usuario)
+        session.commit()
+        session.refresh(novo_usuario)  # Atualiza o objeto com os dados do BD
+        return f'Mensagem salva com sucesso! ID: {novo_usuario.id}'
+    except Exception as error:
+        session.rollback()  # Reverte alterações em caso de erro
+        return f'Erro ao salvar no BD: {error}'
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
+
+def buscar_todos_usuarios():
+
+    data = []
+
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+        cursor.execute('select * from usuarios_sistema;')        
+        resposta = cursor.fetchall()
+        for valor in resposta: 
+            data.append({
+                "id": valor[0],
+                "nome": valor[1],
+                "email": valor[2],
+                "status": valor[3],
+            })
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
+
+    return data
 
 if __name__ == "__main__":
     print(select_all_mensagens())
