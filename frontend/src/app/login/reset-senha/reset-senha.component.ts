@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-reset-senha',
@@ -12,8 +13,18 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ResetSenhaComponent {
 
+  constructor(private api: ApiService) { }
+
   reenviarEmail() {
-    alert('TODO: enviar e-mail.');
+    let email = ((<HTMLInputElement>document.getElementById("email-usuario")).value);    
+
+    this.api.reenvioSenha(email).subscribe({
+      next: (resposta) => {},
+      error: erro => {
+        console.error(erro)
+        alert("Erro ao enviar e-mail com nova senha!");
+      }
+    })  
   }
 
 }

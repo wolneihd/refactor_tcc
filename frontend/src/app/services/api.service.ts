@@ -71,4 +71,11 @@ export class ApiService {
     }
     return this.httpClient.post<any>(`${apiUrl}/salvar_usuario`, dados);
   }
+
+  reenvioSenha(email: string): Observable<any>{
+    const dados = {
+      "email": email
+    }
+    return this.httpClient.post<any>(`${apiUrl}/reenvio_senha`, dados);
+  }
 }

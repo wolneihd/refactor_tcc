@@ -157,3 +157,8 @@ footer {
   margin-top: 15px;
   cursor: pointer;
 }
+
+.aviso-erro-login {
+  display: flex;
+  justify-content: center;
+}

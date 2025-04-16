@@ -16,6 +16,8 @@ const frontEndUrl = enviroment.frontEndUrl;
 })
 export class LoginComponent {
 
+  avisoLogin: boolean = false;
+
   readonly dialog = inject(MatDialog);
 
   abrirDialogContato() {
@@ -35,6 +37,12 @@ export class LoginComponent {
   }
 
   abrirTelaPrincipal() {
-    window.location.href = `${frontEndUrl}/gerenciamento`;
+    let email = ((<HTMLInputElement>document.getElementById("email")).value);
+    let password = ((<HTMLInputElement>document.getElementById("password")).value);  
+    if (email == "admin" && password == "admin") {
+      window.location.href = `${frontEndUrl}/gerenciamento`;      
+    } else {
+      this.avisoLogin = true;
+    }
   }
 }

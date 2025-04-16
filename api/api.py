@@ -6,6 +6,7 @@ from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
 from service_usuarios import service_buscar_usuarios, service_salvar_usuario
+from reenvio_senha_gmail import enviar_email
 
 import os
 from dotenv import load_dotenv
@@ -93,6 +94,13 @@ def montar_API():
         print(dados.get('chave'), flush=True)
         print(dados.get('powerbi'), flush=True)
         return jsonify({'retorno': "teste"}) 
+    
+    # Reenvio de senha por e-mail
+    @app.route('/reenvio_senha', methods=['POST'])
+    def reenvio_senha():
+        dados = request.get_json()
+        enviar_email(dados.get('email'))
+        return jsonify({'retorno': 'teste'})
 
     app.run(port=PORT,host=HOST,debug=True)
 
