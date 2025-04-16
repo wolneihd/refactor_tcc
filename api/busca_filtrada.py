@@ -3,8 +3,6 @@ from repository import select_filter
 
 def filtrar_dados(dados: dict):
 
-    print(f"dados: {dados}", flush=True)
-
     nome_sobrenome = dados.get('nome')
     analise_ia = dados.get('analise_ia') # positivo, neutro, negativo
     categoria = dados.get('categoria')   # palavra chave
@@ -16,10 +14,15 @@ def filtrar_dados(dados: dict):
     categoria = dados.get('categoria')
 
     # conversão para Timestamp para poder fazer busca no banco de dados:
-    data_de_obj = datetime.strptime(data_de, '%Y-%m-%d')
-    data_ate_obj = datetime.strptime(data_ate, '%Y-%m-%d')
-    timestamp_data_de = data_de_obj.timestamp()
-    timestamp_data_ate = data_ate_obj.timestamp()
+    try:
+        data_de_obj = datetime.strptime(data_de, '%Y-%m-%d')
+        data_ate_obj = datetime.strptime(data_ate, '%Y-%m-%d')
+        timestamp_data_de = data_de_obj.timestamp()
+        timestamp_data_ate = data_ate_obj.timestamp()
+    except Exception as e:
+        timestamp_data_de = False
+        timestamp_data_ate = False
+        print('Não foi possível obter datas')
 
     if analise_ia not in ["positivo", "neutro", "negativo"]:
         analise_ia == None
@@ -42,22 +45,20 @@ def filtrar_dados(dados: dict):
         status = None
 
     print(
-        f"analise_ia={analise_ia}",
+        # f"analise_ia={analise_ia}",
         f"status={status}",
-        f"timestamp_data_de={timestamp_data_de}",
-        f"timestamp_data_ate={timestamp_data_ate}",
-        f"nome_sobrenome={nome_sobrenome}",
-        f"categoria={categoria}",
+        # f"timestamp_data_de={timestamp_data_de}",
+        # f"timestamp_data_ate={timestamp_data_ate}",
+        # f"nome_sobrenome={nome_sobrenome}",
+        # f"categoria={categoria}",
         f"llm_selecionada={llm_selecionada}",
-        f"tipo={tipo}",
+        # f"tipo={tipo}",
         flush=True
     )
-
-    select_filter(
-        analise_ia=analise_ia,
-        status=status,
-        tipo=tipo
-    )
     
+    select_filter(
+        status=status,
+        llm_selecionada=llm_selecionada
+    )
 
 

@@ -81,14 +81,14 @@ def atualizar_resposta_bd(ids: list, resposta: str):
         session.close()  # Fecha a sessão para evitar conexões abertas
 
 def select_filter(
-        analise_ia: str,
         status: int,
-        tipo: str,
-        timestamp_data_de: int,
-        timestamp_data_ate: int,
-        nome_sobrenome: str,
-        categoria: str,
-        llm_selecionada: int
+        llm_selecionada: int = None,
+        analise_ia: str = None,
+        tipo: str = None,
+        timestamp_data_de: int = None,
+        timestamp_data_ate: int = None,
+        nome_sobrenome: str = None,
+        categoria: str = None,
         ):
     try:
         conexao = conectar_database()
@@ -114,13 +114,13 @@ def select_filter(
                 FROM aplicacao.mensagens
                 JOIN usuarios ON mensagens.usuario_id = usuarios.id
                 WHERE 
-                    (
-                    mensagens.analise_ia LIKE CONCAT('%', %s, '%')
-                    AND mensagens.tipo_mensagem LIKE CONCAT('%', %s, '%')
-                    AND mensagens.respondido LIKE CONCAT('%', %s, '%')
-                    );
+                   (
+                        (%s IS NULL OR mensagens.respondido = %s)
+                        AND
+                        (%s IS NULL OR mensagens.llm_id = %s)
+                    )
             """
-            , (analise_ia, tipo, status))
+            , (status, status, llm_selecionada, llm_selecionada))
         
         registros = cursor.fetchall()
         print(registros, flush=True)
