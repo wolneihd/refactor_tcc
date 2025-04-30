@@ -65,7 +65,7 @@ services:
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=password
-      - MINIO_DEFAULT_BUCKETS=arquivos
+      - MINIO_DEFAULT_BUCKETS=arquivos, audios
 
 volumes:
   minio_data:
