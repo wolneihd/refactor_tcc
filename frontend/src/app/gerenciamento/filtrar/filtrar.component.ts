@@ -42,15 +42,15 @@ export class FiltrarComponent {
 
     console.log("Realizar busca de:", busca);
 
+    // enviar para a tabela os dados filtrados
     this.api.filtrarBusca(busca).subscribe({
       next: res => {
-        console.log("Retorno POST: ", res);
+        this.share.emitirUsuariosFiltrados(res);
       },
       error: erro => {
         console.error(erro)
       }
     })
-
     this.fecharResponder();
   }
 

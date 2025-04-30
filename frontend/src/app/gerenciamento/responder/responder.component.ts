@@ -5,6 +5,9 @@ import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { Resposta } from '../../entidades/Resposta';
+import { enviroment } from '../../environment/environment';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-responder',
@@ -80,7 +83,7 @@ export class ResponderComponent {
         console.error(erro)
         alert("Erro ao carregar os jogos");
       }
-    })
+    });
   }
 
   fecharResposta() {

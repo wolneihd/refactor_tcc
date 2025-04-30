@@ -39,8 +39,8 @@ export class ApiService {
     return this.httpClient.post<any>(`${apiUrl}/responder`, dados)
   }
 
-  filtrarBusca(busca: Busca): Observable<Busca>{
-    return this.httpClient.post<Busca>(`${apiUrl}/filtrar`, busca);
+  filtrarBusca(busca: Busca): Observable<Usuario[]>{
+    return this.httpClient.post<Usuario[]>(`${apiUrl}/filtrar`, busca);
   }
 
   obterDadosTotem(): Observable<any[]> {

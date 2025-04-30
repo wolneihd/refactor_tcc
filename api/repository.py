@@ -72,6 +72,7 @@ def atualizar_resposta_bd(ids: list, resposta: str):
 
         for id in ids:
             cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta, id))
+            cursor.execute("UPDATE mensagens SET respondido = true WHERE id = %s", (id,))
             conexao.commit()
             print(f'id {id} atualizado com sucesso!')
 
@@ -81,49 +82,74 @@ def atualizar_resposta_bd(ids: list, resposta: str):
         session.close()  # Fecha a sessão para evitar conexões abertas
 
 def select_filter(
-        status: int,
+        nome: str = None,        
+        status: int = None,
         llm_selecionada: int = None,
         analise_ia: str = None,
         tipo: str = None,
         timestamp_data_de: int = None,
         timestamp_data_ate: int = None,
-        nome_sobrenome: str = None,
         categoria: str = None,
         ):
     try:
         conexao = conectar_database()
         cursor = conexao.cursor()
 
+        # Busca dos Usuários:
+        if (nome):
+            cursor.execute("""SELECT * FROM usuarios WHERE  ((nome IS NULL OR nome LIKE  %s) OR (sobrenome IS NULL OR sobrenome LIKE %s))""", (nome, nome))
+        else:
+            cursor.execute("SELECT * FROM usuarios;")
+
+        pessoas = []       
+        registros = cursor.fetchall()
+        for registro in registros:
+            pessoa = {}
+            pessoa['id'] = registro[0]
+            pessoa['nome'] = registro[1]
+            pessoa['sobrenome'] = registro[2]
+            pessoa['userID_Telegram'] = registro[3]
+            pessoa['mensagens'] = []
+            pessoas.append(pessoa)
+
+        # Busca das Mensagens:
         cursor.execute(
             """
-                SELECT 
-                    mensagens.id,
-                    mensagens.usuario_id,
-                    usuarios.nome,
-                    usuarios.sobrenome,
-                    mensagens.texto_msg,
-                    mensagens.timestamp,
-                    mensagens.tipo_mensagem,
-                    mensagens.respondido,
-                    mensagens.nome_imagem,
-                    mensagens.llm_id,
-                    mensagens.analise_ia,
-                    mensagens.categoria,
-                    mensagens.feedback,
-                    mensagens.resposta
-                FROM aplicacao.mensagens
-                JOIN usuarios ON mensagens.usuario_id = usuarios.id
+                SELECT * FROM mensagens
                 WHERE 
-                   (
-                        (%s IS NULL OR mensagens.respondido = %s)
-                        AND
-                        (%s IS NULL OR mensagens.llm_id = %s)
+                    (
+                        (respondido IS NULL OR respondido LIKE  %s)
+                        OR
+                        (llm_id IS NULL OR llm_id LIKE  %s)                         
                     )
+
             """
-            , (status, status, llm_selecionada, llm_selecionada))
+            , (status, llm_selecionada))
         
+        mensagens = []
         registros = cursor.fetchall()
-        print(registros, flush=True)
+        for registro in registros:
+            mensagem = {}
+            mensagem['id'] = registro[0]
+            mensagem['usuario_id'] = registro[1]
+            mensagem['texto_msg'] = registro[2]
+            mensagem['timestamp'] = registro[3]
+            mensagem['tipo_mensagem'] = registro[4]
+            mensagem['respondido'] = registro[4]
+            mensagem['nome_imagem'] = registro[6]
+            mensagem['llm_id'] = registro[7]
+            mensagem['analise_ia'] = registro[8]
+            mensagem['categoria'] = registro[9]
+            mensagem['feedback'] = registro[10]
+            mensagem['resposta'] = registro[11]
+            mensagens.append(mensagem)
+
+        for mensagem in mensagens:
+            for usuario in pessoas:
+                if (usuario['id'] == mensagem['usuario_id']):
+                    usuario['mensagens'].append(mensagem)
+
+        return pessoas
 
     except Exception as error:
         print(f'Erro ao buscar filtrado: {error}', flush=True)

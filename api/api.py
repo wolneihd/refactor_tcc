@@ -30,8 +30,8 @@ def montar_API():
     @app.route('/filtrar', methods=['POST'])
     def filtrar_mensagens():
         dados = request.get_json()
-        filtrar_dados(dados)
-        return jsonify({"retorno":"com sucesso no backend!"})  
+        resultado = filtrar_dados(dados)
+        return jsonify(resultado)  
 
     # gerar sugestão resposta com IA:
     @app.route('/gerar_resposta', methods=['POST'])
