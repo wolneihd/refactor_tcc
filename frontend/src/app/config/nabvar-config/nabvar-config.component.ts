@@ -21,11 +21,15 @@ export class NabvarConfigComponent {
   }
 
   abrirDialogContato() {
-      const dialogRef = this.dialog.open(ContatoComponent);
-  
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    }
+    const dialogRef = this.dialog.open(ContatoComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  sair() {
+    window.location.href = `${frontEndUrl}/login`;
+  }
 
 }

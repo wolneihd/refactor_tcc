@@ -40,4 +40,8 @@ export class NavbarComponent {
   abrirDashboardTotem() {
     window.location.href = `${frontEndUrl}/totem`;
   }
+
+  sair() {
+    window.location.href = `${frontEndUrl}/login`;
+  }
 }

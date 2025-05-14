@@ -79,12 +79,9 @@ export class ResponderComponent {
     this.isResponderSelecionado = false;
     this.share.mostrarFiltrarResponder(this.isResponderSelecionado, false);
     this.api.enviarResposta(this.mensagensSelecionadas, this.respostaIA.resposta).subscribe({
-      next: (resposta) => {
-        this.retornoEnvio = resposta;
-      },
+      next: (resposta) => {},
       error: erro => {
         console.error(erro)
-        alert("Erro ao carregar os jogos");
       }
     });
   }
