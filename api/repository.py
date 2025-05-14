@@ -113,18 +113,29 @@ def select_filter(
             pessoas.append(pessoa)
 
         # Busca das Mensagens:
-        cursor.execute(
-            """
-                SELECT * FROM mensagens
-                WHERE 
-                    (
-                        (respondido IS NULL OR respondido LIKE  %s)
-                        OR
-                        (llm_id IS NULL OR llm_id LIKE  %s)                         
-                    )
+        query = """
+            SELECT * FROM mensagens
+            WHERE 
+                (
+                    (%s IS NULL OR respondido LIKE %s)
+                    AND
+                    (%s IS NULL OR llm_id LIKE %s)
+                    AND
+                    (%s IS NULL OR analise_ia LIKE %s)
+                    AND
+                    (%s IS NULL OR categoria LIKE %s)
+                    AND
+                    (%s IS NULL OR tipo_mensagem LIKE %s)
+                    AND
+                    (%s IS NULL OR timestamp > %s)
+                    AND
+                    (%s IS NULL OR timestamp < %s)
+                );
+        """
 
-            """
-            , (status, llm_selecionada))
+        params = (status, status, llm_selecionada, llm_selecionada, analise_ia, analise_ia, categoria, categoria,
+                  tipo, tipo, timestamp_data_de, timestamp_data_de, timestamp_data_ate, timestamp_data_ate)
+        cursor.execute(query, params)
         
         mensagens = []
         registros = cursor.fetchall()
