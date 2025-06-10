@@ -4,7 +4,7 @@ export interface Mensagem {
   analise_ia: string;
   categoria: string;
   feedback: string;
-  llm: string;
+  llm: number;
   texto_msg: string;
   timestamp: number;
   tipo_mensagem: string;

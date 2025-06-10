@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Usuario } from '../entidades/Usuarios';
 
 @Injectable({
@@ -31,5 +31,19 @@ export class ShareService {
   shareMensagem(usuarios: Usuario[], id: number): void {
     this.usuariosSource.next(usuarios);
     this.idSource.next(id);
+  }
+
+  // Criando um Subject para emitir os dados para o Componente A
+  private usuariosFiltradosSubject = new Subject<Usuario[]>();
+  usuariosFiltrados$ = this.usuariosFiltradosSubject.asObservable();
+
+  // Função para emitir dados de usuários filtrados
+  emitirUsuariosFiltrados(usuarios: Usuario[]) {
+    this.usuariosFiltradosSubject.next(usuarios);
+  }
+
+  // Função para obter os dados atuais (se necessário)
+  obterUsuariosFiltrados() {
+    return this.usuariosFiltradosSubject.asObservable();
   }
 }

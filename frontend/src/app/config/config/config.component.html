@@ -6,19 +6,22 @@
     <div class="box">
         <label for="">IA</label>
         <select name="model-ia" id="model-ia">
-            <option value="GroqIA">GroqIA</option>
-            <option value="Gemini">Gemini</option>
-            <option value="ChatGPT">ChatGPT</option>
-          </select>
+            @for (llm of llms; track $index) {
+                <option value="{{llm.ia}}">{{llm.ia}}</option>
+            }
+        </select>
     </div>
     <div class="box">
         <label for="">Chave API</label>
-        <input type="text" name="" id="">
+        <input type="text" name="chave-api" id="chave-api" disabled placeholder="Ainda não implementado">
     </div>
     <div class="box">
         <label for="">Link Power BI</label>
-        <input type="text" name="" id="">
+        <input type="text" name="link-powerbi" id="link-powerbi" disabled placeholder="Ainda não implementado">
     </div>
+    <div class="box">
+        <button class="btn btn-dark" (click)="obterDadosInput()">Salvar</button>
+    </div>    
 </div>
 
 <div>

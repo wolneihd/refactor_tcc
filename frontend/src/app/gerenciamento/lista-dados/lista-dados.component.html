@@ -4,7 +4,13 @@
 
 <div class="container">
   <div class="usuarios">
-    <p class="head-tabela">Usuários</p>
+    <!-- <p class="head-tabela">Usuários</p> -->
+    <div class="head-tabela-msgs">
+      <p class="head-tabela">Usuários</p>
+      @if (isDadosFiltrados) {
+        <button class="btn btn-dark" (click)="limparFiltros()">Limpar Filtros</button>
+      }
+    </div>
     <table>
       <tr>
         <th>ID</th>
@@ -48,17 +54,34 @@
       </tr>
       <tr *ngFor="let mensagem of mensagens">
         <td>{{mensagem.id}}</td>
-        <td>{{mensagem.llm}}</td>
+
+        @if (mensagem.llm == 1) {
+        <td>GroqIA</td>
+        } @else if (mensagem.llm == 2) {
+        <td>ChatGPT</td>
+        } @else if (mensagem.llm == 3) {
+        <td>Gemini</td>
+        } @else {
+        <td></td>
+        }
+
         <td>{{converterTimestampData(mensagem.timestamp)}}</td>
         <td>{{converterTimestampHora(mensagem.timestamp)}}</td>
         <td>{{informarTipo(mensagem.tipo_mensagem)}}</td>
         <td>{{mensagem.analise_ia | lowercase}}</td>
         <td>{{mensagem.categoria | lowercase}}</td>
         <td>{{mensagem.feedback}}</td>
+
+        @if (mensagem.respondido == 0){
         <td>{{informarStatus(mensagem.respondido)}}</td>
+        } @else {
+        <td class="text-bg-success p-3">{{informarStatus(mensagem.respondido)}}</td>
+        }
+
         <td class="td-center-edit">
           <!-- <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button> -->
-          <button class="btn btn-light" (click)="abrirDialogImagem(mensagem.nome_arquivo, mensagem.tipo_mensagem, mensagem.texto_msg)">Ver</button>
+          <button class="btn btn-light"
+            (click)="abrirDialogImagem(mensagem.nome_arquivo, mensagem.tipo_mensagem, mensagem.texto_msg)">Ver</button>
         </td>
         <td>
           <input type="checkbox" (click)="checkSelecionado(mensagem)">

@@ -27,7 +27,7 @@ class Message:
                 'analise_ia': mensagem.get('analise_ia'),
                 'categoria': mensagem.get('categoria'),
                 'feedback': mensagem.get('feedback'),
-                'llm': mensagem.get('llm'),
+                'llm': mensagem.get('llm_id'),
                 'respondido': mensagem.get('respondido'),
                 'nome_arquivo': mensagem.get('nome_imagem')
             }

@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Mensagem, Usuario } from '../../entidades/Usuarios';
 import { CommonModule } from '@angular/common';
 import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { Resposta } from '../../entidades/Resposta';
+import { enviroment } from '../../environment/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogImagemComponent } from '../dialog-imagem/dialog-imagem.component';
+
+const frontEndUrl = enviroment.frontEndUrl;
 
 @Component({
   selector: 'app-responder',
@@ -49,6 +54,7 @@ export class ResponderComponent {
     }
   }
 
+  mostrarSpinner: boolean = false;
   gerarResposta() {
     this.divResponder = !this.divResponder;
     this.api.gerarRespostaIA(this.promptAdicionalUsuario, this.mensagensSelecionadas).subscribe({
@@ -73,18 +79,31 @@ export class ResponderComponent {
     this.isResponderSelecionado = false;
     this.share.mostrarFiltrarResponder(this.isResponderSelecionado, false);
     this.api.enviarResposta(this.mensagensSelecionadas, this.respostaIA.resposta).subscribe({
-      next: (resposta) => {
-        this.retornoEnvio = resposta;
-      },
+      next: (resposta) => {},
       error: erro => {
         console.error(erro)
-        alert("Erro ao carregar os jogos");
       }
-    })
+    });
   }
 
   fecharResposta() {
     this.isResponderSelecionado = false;
     this.share.mostrarFiltrarResponder(this.isResponderSelecionado, false);
   }
+
+  readonly dialog = inject(MatDialog);
+  
+    abrirDialogImagem(nome_arquivo: string, tipo_mensagem: string, texto_msg: string) {
+      const dialogRef = this.dialog.open(DialogImagemComponent, {
+        data: {
+          url: nome_arquivo,
+          tipo: tipo_mensagem,
+          texto: texto_msg,
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    }
 }

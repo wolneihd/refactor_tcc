@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from entidades import User, Message
-from tables import Base, Totem
+from tables import Base, Totem, UsuariosSistema
 from database import conectar_database
 
 # Carregar variáveis de ambiente
@@ -72,6 +72,7 @@ def atualizar_resposta_bd(ids: list, resposta: str):
 
         for id in ids:
             cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta, id))
+            cursor.execute("UPDATE mensagens SET respondido = true WHERE id = %s", (id,))
             conexao.commit()
             print(f'id {id} atualizado com sucesso!')
 
@@ -81,49 +82,85 @@ def atualizar_resposta_bd(ids: list, resposta: str):
         session.close()  # Fecha a sessão para evitar conexões abertas
 
 def select_filter(
-        analise_ia: str,
-        status: int,
-        tipo: str,
-        timestamp_data_de: int,
-        timestamp_data_ate: int,
-        nome_sobrenome: str,
-        categoria: str,
-        llm_selecionada: int
+        nome: str = None,        
+        status: int = None,
+        llm_selecionada: int = None,
+        analise_ia: str = None,
+        tipo: str = None,
+        timestamp_data_de: int = None,
+        timestamp_data_ate: int = None,
+        categoria: str = None,
         ):
     try:
         conexao = conectar_database()
         cursor = conexao.cursor()
 
-        cursor.execute(
-            """
-                SELECT 
-                    mensagens.id,
-                    mensagens.usuario_id,
-                    usuarios.nome,
-                    usuarios.sobrenome,
-                    mensagens.texto_msg,
-                    mensagens.timestamp,
-                    mensagens.tipo_mensagem,
-                    mensagens.respondido,
-                    mensagens.nome_imagem,
-                    mensagens.llm_id,
-                    mensagens.analise_ia,
-                    mensagens.categoria,
-                    mensagens.feedback,
-                    mensagens.resposta
-                FROM aplicacao.mensagens
-                JOIN usuarios ON mensagens.usuario_id = usuarios.id
-                WHERE 
-                    (
-                    mensagens.analise_ia LIKE CONCAT('%', %s, '%')
-                    AND mensagens.tipo_mensagem LIKE CONCAT('%', %s, '%')
-                    AND mensagens.respondido LIKE CONCAT('%', %s, '%')
-                    );
-            """
-            , (analise_ia, tipo, status))
-        
+        # Busca dos Usuários:
+        if (nome):
+            cursor.execute("""SELECT * FROM usuarios WHERE  ((nome IS NULL OR nome LIKE  %s) OR (sobrenome IS NULL OR sobrenome LIKE %s))""", (nome, nome))
+        else:
+            cursor.execute("SELECT * FROM usuarios;")
+
+        pessoas = []       
         registros = cursor.fetchall()
-        print(registros, flush=True)
+        for registro in registros:
+            pessoa = {}
+            pessoa['id'] = registro[0]
+            pessoa['nome'] = registro[1]
+            pessoa['sobrenome'] = registro[2]
+            pessoa['userID_Telegram'] = registro[3]
+            pessoa['mensagens'] = []
+            pessoas.append(pessoa)
+
+        # Busca das Mensagens:
+        query = """
+            SELECT * FROM mensagens
+            WHERE 
+                (
+                    (%s IS NULL OR respondido LIKE %s)
+                    AND
+                    (%s IS NULL OR llm_id LIKE %s)
+                    AND
+                    (%s IS NULL OR analise_ia LIKE %s)
+                    AND
+                    (%s IS NULL OR categoria LIKE %s)
+                    AND
+                    (%s IS NULL OR tipo_mensagem LIKE %s)
+                    AND
+                    (%s IS NULL OR timestamp > %s)
+                    AND
+                    (%s IS NULL OR timestamp < %s)
+                );
+        """
+
+        params = (status, status, llm_selecionada, llm_selecionada, analise_ia, analise_ia, categoria, categoria,
+                  tipo, tipo, timestamp_data_de, timestamp_data_de, timestamp_data_ate, timestamp_data_ate)
+        cursor.execute(query, params)
+        
+        mensagens = []
+        registros = cursor.fetchall()
+        for registro in registros:
+            mensagem = {}
+            mensagem['id'] = registro[0]
+            mensagem['usuario_id'] = registro[1]
+            mensagem['texto_msg'] = registro[2]
+            mensagem['timestamp'] = registro[3]
+            mensagem['tipo_mensagem'] = registro[4]
+            mensagem['respondido'] = registro[4]
+            mensagem['nome_imagem'] = registro[6]
+            mensagem['llm_id'] = registro[7]
+            mensagem['analise_ia'] = registro[8]
+            mensagem['categoria'] = registro[9]
+            mensagem['feedback'] = registro[10]
+            mensagem['resposta'] = registro[11]
+            mensagens.append(mensagem)
+
+        for mensagem in mensagens:
+            for usuario in pessoas:
+                if (usuario['id'] == mensagem['usuario_id']):
+                    usuario['mensagens'].append(mensagem)
+
+        return pessoas
 
     except Exception as error:
         print(f'Erro ao buscar filtrado: {error}', flush=True)
@@ -154,6 +191,83 @@ def buscar_mensagens_totem():
             })
         finally:
             conexao.close()
+
+    return data
+
+def buscar_todas_llms():
+
+    data = []
+
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+        cursor.execute('SELECT * FROM llm;')        
+        resposta = cursor.fetchall()
+        for valor in resposta: 
+            data.append({
+                "id": valor[0],
+                "ia": valor[1]
+            })
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
+
+    return data
+
+def atualizar_ia(llm: str):
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        cursor.execute('update configs set valor = %s where campo="llm";', (llm, ))
+        conexao.commit()
+
+        print(f'LLM atualizada com sucesso no BD para {llm}', flush=True)
+
+    except Exception as error:
+        print('Erro ao atualizar BD: ', error)
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
+
+# Função corrigida para inserir um registro
+def salvar_novo_usuario(nome: str, email: str):
+    try:
+        novo_usuario = UsuariosSistema(
+            nome = nome,
+            email = email,
+            status = True
+        ) 
+        session.add(novo_usuario)
+        session.commit()
+        session.refresh(novo_usuario)  # Atualiza o objeto com os dados do BD
+        return f'Mensagem salva com sucesso! ID: {novo_usuario.id}'
+    except Exception as error:
+        session.rollback()  # Reverte alterações em caso de erro
+        return f'Erro ao salvar no BD: {error}'
+    finally:
+        session.close()  # Fecha a sessão para evitar conexões abertas
+
+def buscar_todos_usuarios():
+
+    data = []
+
+    try:
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+        cursor.execute('select * from usuarios_sistema;')        
+        resposta = cursor.fetchall()
+        for valor in resposta: 
+            data.append({
+                "id": valor[0],
+                "nome": valor[1],
+                "email": valor[2],
+                "status": valor[3],
+            })
+    except Exception as error:
+        print(f'Erro ao buscar filtrado: {error}', flush=True)
+    finally:
+        conexao.close()
 
     return data
 

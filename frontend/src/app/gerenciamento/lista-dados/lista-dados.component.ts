@@ -25,21 +25,40 @@ export class ListaDadosComponent {
   btnResponder: boolean = false;
   usuarioSelecionado: number = -1;
 
+  isDadosFiltrados: boolean = false;
+
   constructor(
     private share: ShareService,
     private api: ApiService
   ) { }
 
-  ngOnInit(){
-    this.api.obterDadosTabela().subscribe({
-      next: res => {
-        this.usuarios = res; 
-        // console.log(this.usuarios);
+  ngOnInit() {
+    this.carregarUsuarios();
+    this.atualizarUsuariosFiltrados()
+  }
+
+  limparFiltros() {
+    this.isDadosFiltrados = false;
+    this.carregarUsuarios();
+  }
+
+  atualizarUsuariosFiltrados() {
+    this.share.obterUsuariosFiltrados().subscribe(
+      (usuarios: Usuario[]) => {
+        this.usuarios = usuarios;
+        this.isDadosFiltrados = true;
       },
-      error: erro => {
-        console.error(erro)
+      (error) => {
+        console.error('Erro ao receber os dados no Componente A:', error);
       }
-    })
+    );
+  }
+  
+  carregarUsuarios() {
+    this.api.obterDadosTabela().subscribe({
+      next: res => this.usuarios = res,
+      error: erro => console.error(erro)
+    });
   }
 
   informarStatus(codigo: number): String {
@@ -60,7 +79,7 @@ export class ListaDadosComponent {
     }
   }
 
-  checkSelecionado(mensagem:Mensagem) {
+  checkSelecionado(mensagem: Mensagem) {
     mensagem.checkbox = !mensagem.checkbox;
   }
 
@@ -71,9 +90,21 @@ export class ListaDadosComponent {
   }
 
   responderMensagem(usuarios: Usuario[]) {
+    let isOneSelected = false;
+    for (const usuario of usuarios) {
+      for (const msg of usuario.mensagens) {
+        if (msg.checkbox) {
+          isOneSelected= true;
+        }
+      }
+    }
+    if (isOneSelected) {
     this.share.shareMensagem(usuarios, this.usuarioSelecionado);
     this.isResponderSelecionado = !this.isResponderSelecionado;
-    this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado);
+    this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado)      
+    } else {
+      alert('Nenhuma opção foi selecionada para resposta. Favor escolher pelo menos uma opção!')
+    }
   }
 
   verUmaMensagem(mensagem: Mensagem) {
@@ -109,5 +140,5 @@ export class ListaDadosComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
-  }  
+  }
 }

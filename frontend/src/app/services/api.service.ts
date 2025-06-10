@@ -6,6 +6,7 @@ import { enviroment } from '../environment/environment';
 import { Resposta } from '../entidades/Resposta';
 import { Busca } from '../entidades/Busca';
 import { User } from '../entidades/User';
+import { LLM } from '../entidades/LLM';
 
 const apiUrl = enviroment.apiUrl;
 
@@ -38,8 +39,8 @@ export class ApiService {
     return this.httpClient.post<any>(`${apiUrl}/responder`, dados)
   }
 
-  filtrarBusca(busca: Busca): Observable<Busca>{
-    return this.httpClient.post<Busca>(`${apiUrl}/filtrar`, busca);
+  filtrarBusca(busca: Busca): Observable<Usuario[]>{
+    return this.httpClient.post<Usuario[]>(`${apiUrl}/filtrar`, busca);
   }
 
   obterDadosTotem(): Observable<any[]> {
@@ -48,5 +49,33 @@ export class ApiService {
 
   obterTodosUsuarios(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${apiUrl}/usuarios`)
+  }
+
+  obterTodosLLMs(): Observable<LLM[]> {
+    return this.httpClient.get<LLM[]>(`${apiUrl}/llm-disponivel`)
+  }
+
+  salvarInputsConfig(ia: string, chave: string, powerbi: string): Observable<any>{
+    const dados = {
+      "ia": ia,
+      "chave": chave,
+      "powerbi": powerbi 
+    }
+    return this.httpClient.post<any>(`${apiUrl}/alterar-ia`, dados);
+  }
+
+  salvarUsuario(nome: string, email: string): Observable<any>{
+    const dados = {
+      "nome": nome,
+      "email": email
+    }
+    return this.httpClient.post<any>(`${apiUrl}/salvar_usuario`, dados);
+  }
+
+  reenvioSenha(email: string): Observable<any>{
+    const dados = {
+      "email": email
+    }
+    return this.httpClient.post<any>(`${apiUrl}/reenvio_senha`, dados);
   }
 }

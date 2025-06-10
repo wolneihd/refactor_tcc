@@ -1,11 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from repository import select_all_mensagens
+from repository import select_all_mensagens, buscar_todas_llms, atualizar_ia
 from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd, buscar_mensagens_totem
 from gerar_resposta import gerar_resposta_ia
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
-from service_usuarios import service_buscar_usuarios
+from service_usuarios import service_buscar_usuarios, service_salvar_usuario
+from reenvio_senha_gmail import enviar_email
 
 import os
 from dotenv import load_dotenv
@@ -29,8 +30,8 @@ def montar_API():
     @app.route('/filtrar', methods=['POST'])
     def filtrar_mensagens():
         dados = request.get_json()
-        filtrar_dados(dados)
-        return jsonify({"retorno":"com sucesso no backend!"})  
+        resultado = filtrar_dados(dados)
+        return jsonify(resultado)  
 
     # gerar sugestão resposta com IA:
     @app.route('/gerar_resposta', methods=['POST'])
@@ -67,6 +68,39 @@ def montar_API():
     def obter_todos_usuarios():
         data = service_buscar_usuarios()
         return jsonify(data) 
+    
+    # salvar mensagem do totem de feedback:
+    @app.route('/salvar_usuario', methods=['POST'])
+    def salvar_usuario():
+        dados = request.get_json()
+        nome = dados.get('nome')
+        email = dados.get('email')
+        retorno = service_salvar_usuario(nome, email)
+        return jsonify({'retorno': retorno})
+    
+    # obter todas as LLMS:
+    @app.route('/llm-disponivel', methods=['GET'])
+    def obter_todas_opcoes_llm():
+        data = buscar_todas_llms()
+        return jsonify(data)
+
+    # salvar IA alterada:
+    @app.route('/alterar-ia', methods=['POST'])
+    def salvar_ia():
+        dados = request.get_json()
+        atualizar_ia(dados.get('ia'))
+
+        print(dados.get('ia'), flush=True)
+        print(dados.get('chave'), flush=True)
+        print(dados.get('powerbi'), flush=True)
+        return jsonify({'retorno': "teste"}) 
+    
+    # Reenvio de senha por e-mail
+    @app.route('/reenvio_senha', methods=['POST'])
+    def reenvio_senha():
+        dados = request.get_json()
+        enviar_email(dados.get('email'))
+        return jsonify({'retorno': 'teste'})
 
     app.run(port=PORT,host=HOST,debug=True)
 

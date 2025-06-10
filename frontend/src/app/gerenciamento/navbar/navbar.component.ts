@@ -3,6 +3,7 @@ import { ShareService } from '../../services/share.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ContatoComponent } from '../../login/contato/contato.component';
 import { enviroment } from '../../environment/environment';
+import { Router } from '@angular/router';
 
 const frontEndUrl = enviroment.frontEndUrl;
 
@@ -16,11 +17,13 @@ const frontEndUrl = enviroment.frontEndUrl;
 export class NavbarComponent {
 
   readonly dialog = inject(MatDialog);
+  mostrarFiltrar: boolean = false;
 
-  constructor(private shareService: ShareService) { }
+  constructor(private shareService: ShareService, private router: Router) { }
 
   filtrarMensagem() {
-    this.shareService.mostrarFiltrarResponder(true, false);
+    this.mostrarFiltrar = !this.mostrarFiltrar;
+    this.shareService.mostrarFiltrarResponder(this.mostrarFiltrar, false);
   }
 
   abrirDialogContato() {
@@ -32,10 +35,17 @@ export class NavbarComponent {
   }
 
   abrirConfigurar() {
-    window.location.href = `${frontEndUrl}/configurar`;
+    //window.location.href = `${frontEndUrl}/configurar`;
+    this.router.navigate(['/configurar'])
   }
 
   abrirDashboardTotem() {
-    window.location.href = `${frontEndUrl}/totem`;
+    //window.location.href = `${frontEndUrl}/totem`;
+    this.router.navigate(['/totem'])
+  }
+
+  sair() {
+    // window.location.href = `${frontEndUrl}/login`;
+    this.router.navigate(['/login'])
   }
 }

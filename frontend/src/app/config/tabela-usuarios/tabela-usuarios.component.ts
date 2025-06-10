@@ -5,6 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserConfigComponent } from '../user-config/user-config.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ExcluirUsuarioComponent } from '../excluir-usuario/excluir-usuario.component';
 
 @Component({
   selector: 'app-tabela-usuarios',
@@ -25,7 +26,7 @@ export class TabelaUsuariosComponent {
     this.api.obterTodosUsuarios().subscribe({
       next: res => {
         this.usuarios = res;
-        console.log(this.usuarios);
+        // console.log(this.usuarios);
       },
       error: erro => {
         console.error(erro)
@@ -44,7 +45,11 @@ export class TabelaUsuariosComponent {
   }
 
   excluirUsuario(nome: string) {
-    alert('todo: excluir usuario: ' + nome)
+    const dialogRef = this.dialog.open(ExcluirUsuarioComponent, {
+      data: {
+        nome: nome,
+      }
+    });
   }
 
   novoUsuario() {
