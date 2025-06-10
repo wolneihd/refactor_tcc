@@ -84,6 +84,12 @@ export class ResponderComponent {
         console.error(erro)
       }
     });
+    this.api.obterDadosTabela().subscribe({
+      next: res => {
+        this.share.emitirUsuariosFiltrados(res);
+      },
+      error: erro => console.error(erro)
+    });
   }
 
   fecharResposta() {
