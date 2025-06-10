@@ -14,18 +14,20 @@ def analise_texto_gemini(mensagem: str):
 
     prompt = gerar_prompt(mensagem)
 
-    response = model.generate_content(prompt)
-
     # instanciando objeto:
     try:
+        response = model.generate_content(prompt)        
         texto = response.text
         print('retorno IA: ', response.text)
         # texto = response.choices[0].message.content
         partes = texto.split(';')
         texto_formatado = [parte.replace('"', '').replace('.', '').replace('\n', '') for parte in partes]
         return texto_formatado[0], texto_formatado[1], texto_formatado[2]
-    except:
-        print("Erro ao gerar Array e instanciar o objeto.")
+    except Exception as error:
+        if "You exceeded your current quota" in str(error):
+            print(f"Limite de tokens atingido no Gemini")
+        else: 
+            print(f"Erro ao gerar Array e instanciar o objeto: {error}")            
         return None, None, None
 
 if __name__ == "__main__":

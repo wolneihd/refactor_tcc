@@ -146,7 +146,7 @@ def select_filter(
             mensagem['texto_msg'] = registro[2]
             mensagem['timestamp'] = registro[3]
             mensagem['tipo_mensagem'] = registro[4]
-            mensagem['respondido'] = registro[4]
+            mensagem['respondido'] = registro[5]
             mensagem['nome_imagem'] = registro[6]
             mensagem['llm_id'] = registro[7]
             mensagem['analise_ia'] = registro[8]

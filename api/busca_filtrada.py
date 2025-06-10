@@ -3,9 +3,8 @@ from repository import select_filter
 
 def filtrar_dados(dados: dict):
 
-    # implementando
-    data_de = dados.get('dataDe')
-    data_ate = dados.get('DataAte')
+    # recebido frontend:
+    print(f'{dados}', flush=True)
 
     # Dados para busca
     nome_sobrenome = dados.get('nome').capitalize()
@@ -13,7 +12,9 @@ def filtrar_dados(dados: dict):
     llm_selecionada = dados.get('ia') 
     analise_ia = dados.get('analise_ia')
     categoria = dados.get('categoria')
-    tipo_mensagem = dados.get('tipo')    
+    tipo_mensagem = dados.get('tipo')
+    data_de = dados.get('dataDe')
+    data_ate = dados.get('DataAte')        
 
     # converter da data para datetime:
     if (data_de):
@@ -37,6 +38,8 @@ def filtrar_dados(dados: dict):
     # criar regra para analise-ia:
     if categoria == 'todas':
         categoria = None
+    else: 
+        categoria = categoria.lower()
 
     # converter para dados em busca no BD:
     if status == "em_aberto":
@@ -59,7 +62,7 @@ def filtrar_dados(dados: dict):
     print(f"""
         Buscando:
         nome: {nome_sobrenome}
-        status: {status}
+        status (em_aberto/respondido): {status}
         llm da busca: {llm_selecionada}
         analise_ia: {analise_ia}
         categoria: {categoria}

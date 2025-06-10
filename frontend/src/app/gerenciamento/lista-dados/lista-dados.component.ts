@@ -40,6 +40,7 @@ export class ListaDadosComponent {
   limparFiltros() {
     this.isDadosFiltrados = false;
     this.carregarUsuarios();
+    this.mensagens = [];
   }
 
   atualizarUsuariosFiltrados() {
@@ -47,6 +48,7 @@ export class ListaDadosComponent {
       (usuarios: Usuario[]) => {
         this.usuarios = usuarios;
         this.isDadosFiltrados = true;
+        this.mensagens = [];
       },
       (error) => {
         console.error('Erro ao receber os dados no Componente A:', error);
@@ -83,10 +85,16 @@ export class ListaDadosComponent {
     mensagem.checkbox = !mensagem.checkbox;
   }
 
+  isUsuarioSelecionado: boolean = false; 
   verMensagens(mensagens: Mensagem[], id: number) {
-    this.mensagens = mensagens;
-    this.btnResponder = true;
-    this.usuarioSelecionado = id
+    if (!this.isUsuarioSelecionado) {
+      this.mensagens = mensagens;
+      this.btnResponder = true;
+      this.usuarioSelecionado = id       
+    } else { 
+      this.mensagens = [];
+    }
+    this.isUsuarioSelecionado = !this.isUsuarioSelecionado;   
   }
 
   responderMensagem(usuarios: Usuario[]) {

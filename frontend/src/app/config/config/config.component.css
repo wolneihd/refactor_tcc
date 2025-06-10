@@ -16,3 +16,16 @@
 label {
     font-weight: bold;
 }
+
+.dividir-tela {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container {
+    width: 100%;
+}
+
+textarea {
+    margin-top: 10px;
+}

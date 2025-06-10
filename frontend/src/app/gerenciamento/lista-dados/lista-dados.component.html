@@ -8,7 +8,7 @@
     <div class="head-tabela-msgs">
       <p class="head-tabela">Usuários</p>
       @if (isDadosFiltrados) {
-        <button class="btn btn-dark" (click)="limparFiltros()">Limpar Filtros</button>
+      <button class="btn btn-dark" (click)="limparFiltros()">Limpar Filtros</button>
       }
     </div>
     <table>
@@ -61,6 +61,8 @@
         <td>ChatGPT</td>
         } @else if (mensagem.llm == 3) {
         <td>Gemini</td>
+        } @else if (mensagem.llm == null) {
+        <td>N/A</td>
         } @else {
         <td></td>
         }
@@ -76,7 +78,7 @@
         <td>{{informarStatus(mensagem.respondido)}}</td>
         } @else {
         <td class="text-bg-success p-3">{{informarStatus(mensagem.respondido)}}</td>
-        }
+        } 
 
         <td class="td-center-edit">
           <!-- <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button> -->
