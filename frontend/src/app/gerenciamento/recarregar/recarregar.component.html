@@ -1,0 +1,21 @@
+<mat-dialog-content class="mat-typography box-contato">
+
+    <div class="container-inputs">
+        <h4>Reprocesse a mensagem enviada pelo usuário:</h4>
+
+        <label for="analise_ia">Análise IA:</label>
+        <input type="text" id="analise_ia" value="{{this.analiseIA}}">
+
+        <label for="categoria">Categoria:</label>
+        <input type="text" id="categoria" value="{{this.categoria}}">
+
+        <label for="resumo">Resumo:</label>
+        <input type="text" id="resumo" value="{{this.resumo}}">
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button class="btn btn-light" [mat-dialog-close]="true">Fechar</button>
+    <button class="btn btn-dark" [mat-dialog-close]="true">Salvar</button>
+</mat-dialog-actions>

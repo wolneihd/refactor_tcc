@@ -8,11 +8,14 @@ import { ShareService } from '../../services/share.service';
 import { ApiService } from '../../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogImagemComponent } from '../dialog-imagem/dialog-imagem.component';
+import { DialogErroComponent } from '../../dialog-erro/dialog-erro.component';
+import { MatIconModule } from '@angular/material/icon';
+import { RecarregarComponent } from '../recarregar/recarregar.component';
 
 @Component({
   selector: 'app-lista-dados',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './lista-dados.component.html',
   styleUrl: './lista-dados.component.css'
 })
@@ -55,7 +58,7 @@ export class ListaDadosComponent {
       }
     );
   }
-  
+
   carregarUsuarios() {
     this.api.obterDadosTabela().subscribe({
       next: res => this.usuarios = res,
@@ -85,16 +88,16 @@ export class ListaDadosComponent {
     mensagem.checkbox = !mensagem.checkbox;
   }
 
-  isUsuarioSelecionado: boolean = false; 
+  isUsuarioSelecionado: boolean = false;
   verMensagens(mensagens: Mensagem[], id: number) {
     if (!this.isUsuarioSelecionado) {
       this.mensagens = mensagens;
       this.btnResponder = true;
-      this.usuarioSelecionado = id       
-    } else { 
+      this.usuarioSelecionado = id
+    } else {
       this.mensagens = [];
     }
-    this.isUsuarioSelecionado = !this.isUsuarioSelecionado;   
+    this.isUsuarioSelecionado = !this.isUsuarioSelecionado;
   }
 
   responderMensagem(usuarios: Usuario[]) {
@@ -102,16 +105,19 @@ export class ListaDadosComponent {
     for (const usuario of usuarios) {
       for (const msg of usuario.mensagens) {
         if (msg.checkbox) {
-          isOneSelected= true;
+          isOneSelected = true;
         }
       }
     }
     if (isOneSelected) {
-    this.share.shareMensagem(usuarios, this.usuarioSelecionado);
-    this.isResponderSelecionado = !this.isResponderSelecionado;
-    this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado)      
+      this.share.shareMensagem(usuarios, this.usuarioSelecionado);
+      this.isResponderSelecionado = !this.isResponderSelecionado;
+      this.share.mostrarFiltrarResponder(false, this.isResponderSelecionado)
     } else {
-      alert('Nenhuma opção foi selecionada para resposta. Favor escolher pelo menos uma opção!')
+      this.mostrarErro(
+        "Verificar o erro abaixo:",
+        "Nenhuma opção foi selecionada para resposta. Favor escolher pelo menos uma opção."
+      )
     }
   }
 
@@ -147,6 +153,25 @@ export class ListaDadosComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  mostrarErro(titulo: string, erro: string) {
+    const dialogRef = this.dialog.open(DialogErroComponent, {
+      data: {
+        titulo: titulo,
+        erro: erro
+      }
+    });
+  }
+
+  dialogReprocessar(analise_ia: string, categoria: string, resumo: string) {
+    const dialogRef = this.dialog.open(RecarregarComponent, {
+      data: {
+        analiseIA: analise_ia,
+        categoria: categoria,
+        resumo: resumo
+      }
     });
   }
 }

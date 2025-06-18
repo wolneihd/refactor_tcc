@@ -49,11 +49,11 @@
         <th>Categoria</th>
         <th>Resumo</th>
         <th>Status</th>
-        <th>Visualizar</th>
-        <th>Selecionar</th>
+        <th>Ação</th>
+        <th>Responder</th>
       </tr>
-      <tr *ngFor="let mensagem of mensagens">
-        <td>{{mensagem.id}}</td>
+      <tr *ngFor="let mensagem of mensagens; let i = index">
+        <td>{{i + 1}}</td>
 
         @if (mensagem.llm == 1) {
         <td>GroqIA</td>
@@ -78,15 +78,21 @@
         <td>{{informarStatus(mensagem.respondido)}}</td>
         } @else {
         <td class="text-bg-success p-3">{{informarStatus(mensagem.respondido)}}</td>
-        } 
+        }
 
-        <td class="td-center-edit">
-          <!-- <button class="btn btn-light" (click)="verUmaMensagem(mensagem)">Ver</button> -->
-          <button class="btn btn-light"
-            (click)="abrirDialogImagem(mensagem.nome_arquivo, mensagem.tipo_mensagem, mensagem.texto_msg)">Ver</button>
+        <td class="container-icone">
+          <div class="icone-wrapper">
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <mat-icon (click)="dialogReprocessar(mensagem.feedback, mensagem.categoria, mensagem.analise_ia)">refresh</mat-icon>
+            <mat-icon
+              (click)="abrirDialogImagem(mensagem.nome_arquivo, mensagem.tipo_mensagem, mensagem.texto_msg)">open_in_new</mat-icon>
+          </div>
         </td>
-        <td>
-          <input type="checkbox" (click)="checkSelecionado(mensagem)">
+
+        <td class="checkbox-selecionar">
+          <div class="checkbox-wrapper">
+            <input type="checkbox" (click)="checkSelecionado(mensagem)">
+          </div>
         </td>
       </tr>
     </table>

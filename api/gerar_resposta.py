@@ -15,13 +15,14 @@ def gerar_resposta_ia(dados: dict):
         Lista de mensagens: {str(mensagens)}
 
         Contexto adicional do usuário: '''{dados.get('texto_adicional')}'''
-        Caso o contexto adicional venha vazio, gerar uma resposta apenas considerando o contexto já dado.
-        Você deve inserir obrigatoriamente o contexto adicional.
+        Caso o contexto adicional venha vazio, gerar uma resposta apenas considerando a lista de mensagens.
+        Você deve considerar obrigatoriamente o contexto adicional para gerar sua resposta.
 
-        O seu retorno deve ser apenas a mensagem para o cliente.
+        Gerar uma resposta amigável. Evitar ser muito sucinto.
         Remover as quebras de linha antes do inicio do texto.
     """
 
+    print(f'Seu prompt: {prompt}', flush=True)
     resposta = analise_texto_gropIA(prompt=prompt)
     return resposta
 

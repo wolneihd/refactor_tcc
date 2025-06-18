@@ -2,7 +2,7 @@ import os
 from groq import Groq
 from dotenv import load_dotenv
 
-def analise_texto_gropIA(prompt: list):
+def analise_texto_gropIA(prompt: str):
 
     load_dotenv()
     GROQ_API_KEY = os.getenv('GROQ_API_KEY')
@@ -12,7 +12,7 @@ def analise_texto_gropIA(prompt: list):
 
     response = client.chat.completions.create(model="llama3-70b-8192",
                                                 messages=chat_history,
-                                                temperature=.5)
+                                                temperature=1)
 
     return response.choices[0].message.content
 

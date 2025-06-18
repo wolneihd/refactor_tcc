@@ -50,3 +50,29 @@ td + td, th + th {
   display: flex;
   justify-content: space-between;
 }
+
+.container-icone {
+  padding: 0;
+}
+
+.icone-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%; /* Ocupa toda a altura da célula */
+}
+
+.checkbox-selecionar {
+  padding: 0;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+mat-icon:hover {
+  cursor: pointer;
+}

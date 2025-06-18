@@ -1,7 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogErroComponent } from '../../dialog-erro/dialog-erro.component';
 
 @Component({
   selector: 'app-excluir-usuario',
@@ -22,8 +23,14 @@ export class ExcluirUsuarioComponent {
     this.nome = this.data.nome;
   }
 
+  readonly dialog = inject(MatDialog);
   inativarUsuario() {
-    alert('TODO: inativar usuário: ' + this.nome)
+    const dialogRef = this.dialog.open(DialogErroComponent, {
+      data: {
+        titulo: "Funcionalidade ainda não implementada...",
+        erro: "Por ser uma versão teste, esta funcionalidade ainda não está disponivel."
+      }
+    });
   }
 
 }

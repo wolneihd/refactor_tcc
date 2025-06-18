@@ -32,11 +32,11 @@ export class UserConfigComponent {
     let email = ((<HTMLInputElement>document.getElementById("email")).value);
 
     this.api.salvarUsuario(nome, email).subscribe({
-      next: (resposta) => {},
+      next: (resposta) => { },
       error: erro => {
         console.error(erro)
         alert("Erro ao salvar usuário!");
       }
-    })    
+    })
   }
 }

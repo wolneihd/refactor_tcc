@@ -1,0 +1,11 @@
+.container-inputs {
+    display: grid;
+}
+
+label {
+    color: black;
+}
+
+h4 {
+    color: black;    
+}
