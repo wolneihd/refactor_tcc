@@ -271,5 +271,28 @@ def buscar_todos_usuarios():
 
     return data
 
+def atualizar_mensagem(dados: dict) -> str:
+    try:
+        id = dados.get('id')
+        resumo = dados.get('resumo')
+        feedback = dados.get('feedback')
+        categoria = dados.get('categoria')
+
+        conexao = conectar_database()
+        cursor = conexao.cursor()
+
+        cursor.execute("""UPDATE mensagens SET 
+	                        categoria = %s,
+                            analise_ia = %s,
+                            feedback = %s
+                            WHERE id = %s""", (categoria, feedback, resumo, id))
+        conexao.commit()
+        return {'response': f"mensagem de {id} atualizado com sucesso!"}
+    
+    except Exception as error:
+        print('Erro ao atualizar BD: ', error)
+    finally:
+        session.close() 
+
 if __name__ == "__main__":
     print(select_all_mensagens())

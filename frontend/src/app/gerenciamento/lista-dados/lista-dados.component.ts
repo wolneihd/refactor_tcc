@@ -165,12 +165,10 @@ export class ListaDadosComponent {
     });
   }
 
-  dialogReprocessar(analise_ia: string, categoria: string, resumo: string) {
+  dialogReprocessar(mensagem: Mensagem) {
     const dialogRef = this.dialog.open(RecarregarComponent, {
       data: {
-        analiseIA: analise_ia,
-        categoria: categoria,
-        resumo: resumo
+        mensagem: mensagem
       }
     });
   }

@@ -7,6 +7,7 @@ import { Resposta } from '../entidades/Resposta';
 import { Busca } from '../entidades/Busca';
 import { User } from '../entidades/User';
 import { LLM } from '../entidades/LLM';
+import { Reanalise } from '../entidades/Reanalise';
 
 const apiUrl = enviroment.apiUrl;
 
@@ -77,5 +78,23 @@ export class ApiService {
       "email": email
     }
     return this.httpClient.post<any>(`${apiUrl}/reenvio_senha`, dados);
+  }
+
+  salvarReprocesso(resumo: string, feedback: string, categoria: string, id: number): Observable<any>{
+    const dados = {
+      "id": id,
+      "resumo": resumo,
+      "feedback": feedback,
+      "categoria": categoria
+    }
+    return this.httpClient.post<any>(`${apiUrl}/salvar_reprocesso`, dados);
+  }
+
+  reprocessarMensagem(mensagem: string, id: number): Observable<any>{
+    const dados = {
+      "id": id,
+      "mensagem": mensagem
+    }
+    return this.httpClient.post<Reanalise>(`${apiUrl}/reprocessar`, dados);
   }
 }

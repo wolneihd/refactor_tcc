@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from repository import select_all_mensagens, buscar_todas_llms, atualizar_ia
+from repository import select_all_mensagens, buscar_todas_llms, atualizar_ia, atualizar_mensagem
 from repository import create_tables, insert_feedback_totem, atualizar_resposta_bd, buscar_mensagens_totem
-from gerar_resposta import gerar_resposta_ia
+from gerar_resposta import gerar_resposta_ia, reprocessar_mensagem_usuario
 from enviar_resposta import obter_dados_resposta
 from busca_filtrada import filtrar_dados
 from service_usuarios import service_buscar_usuarios, service_salvar_usuario
@@ -101,6 +101,20 @@ def montar_API():
         dados = request.get_json()
         enviar_email(dados.get('email'))
         return jsonify({'retorno': 'teste'})
+    
+    # Reeprocessar mensagem do usuário
+    @app.route('/reprocessar', methods=['POST'])
+    def reprocessar_mensagem():
+        dados = request.get_json()
+        response = reprocessar_mensagem_usuario(dados)
+        return jsonify(response)
+    
+    # Reeprocessar mensagem do usuário
+    @app.route('/salvar_reprocesso', methods=['POST'])
+    def salvar_reprocesso():
+        dados = request.get_json()
+        response = atualizar_mensagem(dados)
+        return jsonify(response)
 
     app.run(port=PORT,host=HOST,debug=True)
 

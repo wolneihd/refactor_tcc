@@ -4,18 +4,19 @@
         <h4>Reprocesse a mensagem enviada pelo usuário:</h4>
 
         <label for="analise_ia">Análise IA:</label>
-        <input type="text" id="analise_ia" value="{{this.analiseIA}}">
+        <input type="text" id="analise_ia" [value]="this.mensagem.analise_ia">
 
         <label for="categoria">Categoria:</label>
-        <input type="text" id="categoria" value="{{this.categoria}}">
+        <input type="text" id="categoria" [value]="mensagem.categoria">
 
         <label for="resumo">Resumo:</label>
-        <input type="text" id="resumo" value="{{this.resumo}}">
+        <input type="text" id="resumo" value="{{this.mensagem.feedback}}">
     </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
     <button class="btn btn-light" [mat-dialog-close]="true">Fechar</button>
-    <button class="btn btn-dark" [mat-dialog-close]="true">Salvar</button>
+    <button class="btn btn-light" (click)="reavaliarMensagem()">Reavaliar</button>
+    <button class="btn btn-dark" [mat-dialog-close]="true" (click)="captarDadosCampos()">Salvar</button>
 </mat-dialog-actions>
