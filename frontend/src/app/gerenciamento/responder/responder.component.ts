@@ -65,7 +65,7 @@ export class ResponderComponent {
       },
       error: erro => {
         console.error(erro)
-        alert("Erro ao carregar os jogos");
+        alert("Erro ao gerar resposta (verificar log docker/API)");
       }
     })
   }

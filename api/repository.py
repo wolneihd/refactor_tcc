@@ -71,8 +71,13 @@ def atualizar_resposta_bd(ids: list, resposta: str):
         cursor = conexao.cursor()
 
         for id in ids:
-            cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta, id))
+            # hotfix para mensagens acima de 255 caracteres: 
+            # devido prazo curto para apresentação do projeto, vou colocar essa lógica para alterar status no front
             cursor.execute("UPDATE mensagens SET respondido = true WHERE id = %s", (id,))
+            if (len(resposta) >= 255):                
+                cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta[:251], id))   
+            else:
+                cursor.execute("UPDATE mensagens SET resposta = %s WHERE id = %s", (resposta, id))             
             conexao.commit()
             print(f'id {id} atualizado com sucesso!')
 

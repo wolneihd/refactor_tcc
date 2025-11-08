@@ -11,9 +11,11 @@ def analise_texto_gropIA(prompt: str):
 
         chat_history = [{"role": "assistant", "content": prompt}]
 
-        response = client.chat.completions.create(model="llama3-70b-8192",
+        response = client.chat.completions.create(model="meta-llama/llama-4-maverick-17b-128e-instruct",
                                                     messages=chat_history,
                                                     temperature=1)
+
+        print(f'Response: {response}', flush=True)
 
         return response.choices[0].message.content
     except Exception as error:
